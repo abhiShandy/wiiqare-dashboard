@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
@@ -18,18 +19,22 @@ const Home: NextPage = () => {
         </h1>
 
         <div className={styles.grid}>
-          <a href="/currencies" className={styles.card}>
-            <h2>Fiat currencies &rarr;</h2>
-            <p>
-              The complete list of fiat currencies supported in both payments
-              and channels.
-            </p>
-          </a>
+          <Link href="/currencies">
+            <a className={styles.card}>
+              <h2>Fiat currencies &rarr;</h2>
+              <p>
+                The complete list of fiat currencies supported in both payments
+                and channels.
+              </p>
+            </a>
+          </Link>
 
-          <a href="/channels" className={styles.card}>
-            <h2>Channels &rarr;</h2>
-            <p>Create and list channels.</p>
-          </a>
+          <Link href="/channels">
+            <a className={styles.card}>
+              <h2>Channels &rarr;</h2>
+              <p>Create and list channels.</p>
+            </a>
+          </Link>
         </div>
       </main>
     </div>

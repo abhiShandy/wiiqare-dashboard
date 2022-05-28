@@ -74,7 +74,7 @@ const Channels = () => {
           }}
         />
         <button
-          className="bg-blue-500 p-2 rounded-md text-white"
+          className="bg-gray-500 p-2 rounded-md text-white"
           onClick={createChannel}
         >
           Create Channel
@@ -82,7 +82,7 @@ const Channels = () => {
       </div>
       <div className="border-gray-500 border-2 rounded-md max-w-5xl mx-auto mt-5 text-center p-2">
         <button
-          className="bg-blue-500 p-2 rounded-md text-white"
+          className="bg-gray-500 p-2 rounded-md text-white"
           onClick={getChannels}
         >
           List Channels

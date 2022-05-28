@@ -6,6 +6,7 @@ const Navbar = () => {
       <Link href="/">Home</Link>
       <Link href="/currencies">Currencies</Link>
       <Link href="/channels">Channels</Link>
+      <Link href="/payments">Payments</Link>
     </nav>
   );
 };
