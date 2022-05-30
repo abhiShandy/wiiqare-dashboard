@@ -1,9 +1,7 @@
 import axios from "axios";
 import hawk from "hawk";
 import Head from "next/head";
-import { useState } from "react";
 import Dashboard from "../components/dashboard";
-import Navbar from "../components/navbar";
 
 const credentials: {
   id: string;

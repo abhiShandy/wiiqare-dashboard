@@ -1,100 +1,106 @@
+import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import hawk from "hawk";
-import { MouseEventHandler, useState } from "react";
-import Navbar from "../components/navbar";
+import Head from "next/head";
+import Dashboard from "../components/dashboard";
 
 type Payment = {
   uuid: string;
   type: string;
   status: string;
   dateCreated: string;
+  displayCurrency: {
+    amount: number;
+    currency: string;
+  };
 };
 
-const url = "https://api.sandbox.coindirect.com";
 const credentials: {
   id: string;
   key: string;
   algorithm: "sha256" | "sha1";
 } = {
-  id: "ZPcwjLvvZ107UEhAgOvFqgl6Qmlz92pmJYTVOfPGl3SSseCJJuqF92nlkjSeEHSp",
-  key: "4KcRYkSBfJmPRpNO6ebccRLvuxlsq5pEtGzJjAuLleZvYMdiUP1xMEHJ9Chtkges",
+  id: process.env.COINDIRECT_HAWK_ID || "",
+  key: process.env.COINDIRECT_HAWK_KEY || "",
   algorithm: "sha256",
 };
 
-const merchantId = "e7c967e0-ea58-41de-aad2-c8a28d970baa";
+export async function getServerSideProps() {
+  try {
+    const merchantId = "e7c967e0-ea58-41de-aad2-c8a28d970baa";
+    const url = `https://api.sandbox.coindirect.com/api/v1/pay/summary?merchantId=${merchantId}`;
+    const { header } = hawk.client.header(url, "GET", {
+      credentials,
+    });
+    const response = await axios.get<Payment[]>(url, {
+      headers: { Authorization: header },
+    });
+    return {
+      props: {
+        payments: response.data,
+      },
+    };
+  } catch (error) {
+    console.log("Failed to get payments");
+    return {
+      props: {
+        payments: [],
+      },
+    };
+  }
+}
 
-const Payments = () => {
-  const [payments, setPayments] = useState<Payment[]>([]);
-  const getPayments: MouseEventHandler<HTMLButtonElement> = async (e) => {
-    e.preventDefault();
-    try {
-      const getPaymentsURL =
-        url + `/api/v1/pay/summary?merchantId=${merchantId}`;
-      const { header } = hawk.client.header(getPaymentsURL, "GET", {
-        credentials,
-      });
-      const response = await axios.get(getPaymentsURL, {
-        headers: { Authorization: header },
-      });
-      setPayments(response.data);
-    } catch (error) {
-      alert("Failed to get payments");
-    }
-  };
+const Payments = ({ payments }: { payments: Payment[] }) => {
   return (
     <>
-      <Navbar />
-      <div className="border-gray-500 border-2 rounded-md max-w-2xl mx-auto mt-5 text-center p-2">
-        <button
-          className="bg-gray-500 p-2 rounded-md text-white"
-          onClick={getPayments}
-        >
-          List Payments
-        </button>
-        <table className="divide-y divide-gray-300 m-auto">
-          <thead className="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                UUID
-              </th>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                Date Created
-              </th>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                Type
-              </th>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                Status
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {payments &&
-              payments.map((payment) => (
-                <tr key={payment.uuid}>
-                  <td>{payment.uuid}</td>
-                  <td>
-                    {new Date(payment.dateCreated).toISOString().slice(1, -8)}
-                  </td>
-                  <td>{payment.type}</td>
-                  <td>{payment.status}</td>
+      <Head>
+        <title>WiiQare | Payments</title>
+      </Head>
+      <Dashboard title="Payments">
+        {payments && (
+          <div className="border rounded-lg">
+            <table className="w-full">
+              <thead>
+                <tr className="text-left h-8 bg-gray-200">
+                  <th className="pl-4">UUID</th>
+                  <th>Amount</th>
+                  <th>Date Created</th>
+                  <th>Type</th>
+                  <th>Status</th>
                 </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+              </thead>
+              <tbody>
+                {payments &&
+                  payments.map((payment) => (
+                    <tr key={payment.uuid} className="h-8 hover:bg-gray-200">
+                      <td className="pl-4">{payment.uuid}</td>
+                      <td>{`${payment.displayCurrency.amount} ${payment.displayCurrency.currency}`}</td>
+                      <td>
+                        {new Date(payment.dateCreated)
+                          .toISOString()
+                          .slice(1, -8)}
+                      </td>
+                      <td>
+                        {payment.type === "IN" ? (
+                          <ArrowDownIcon className="h-6 text-green-500" />
+                        ) : (
+                          <ArrowUpIcon />
+                        )}
+                      </td>
+                      <td>
+                        {payment.status === "EXPIRED" ? (
+                          <span className="text-red-500">EXPIRED</span>
+                        ) : (
+                          payment.status
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Dashboard>
     </>
   );
 };

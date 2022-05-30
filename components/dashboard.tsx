@@ -11,6 +11,7 @@ import Image from "next/image";
 const navigation = [
   { name: "Wallets", href: "/wallets", icon: CashIcon, current: false },
   { name: "Currencies", href: "/currencies", icon: CashIcon, current: false },
+  { name: "Payments", href: "/payments", icon: CashIcon, current: false },
   { name: "Channels", href: "/channels", icon: CashIcon, current: false },
   {
     name: "Merchants",
