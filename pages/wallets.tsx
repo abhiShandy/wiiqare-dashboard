@@ -1,79 +1,120 @@
 import axios from "axios";
 import hawk from "hawk";
-import { useState } from "react";
-import Navbar from "../components/navbar";
+import Head from "next/head";
+import Image from "next/image";
+import Dashboard from "../components/dashboard";
 
 const credentials: {
   id: string;
   key: string;
   algorithm: "sha256" | "sha1";
 } = {
-  id: "ZPcwjLvvZ107UEhAgOvFqgl6Qmlz92pmJYTVOfPGl3SSseCJJuqF92nlkjSeEHSp",
-  key: "4KcRYkSBfJmPRpNO6ebccRLvuxlsq5pEtGzJjAuLleZvYMdiUP1xMEHJ9Chtkges",
+  id: process.env.COINDIRECT_HAWK_ID || "",
+  key: process.env.COINDIRECT_HAWK_KEY || "",
   algorithm: "sha256",
 };
 
-const Wallets = () => {
-  const [wallets, setWallets] = useState([]);
-  const getWallets = async () => {
-    const url = "https://api.sandbox.coindirect.com/api/wallet";
-    try {
-      const { header } = hawk.client.header(url, "GET", {
-        credentials,
-      });
-      const response = await axios.get(url, {
-        headers: { Authorization: header },
-      });
-      setWallets(response.data);
-    } catch (error) {
-      alert("Failed to get wallets");
-    }
+type Wallet = {
+  id: string;
+  balance: string;
+  currency: {
+    code: string;
+    name: string;
+    icon: string;
+    fiat: boolean;
   };
+};
+
+export async function getServerSideProps() {
+  const url = "https://api.sandbox.coindirect.com/api/wallet";
+  try {
+    const { header } = hawk.client.header(url, "GET", {
+      credentials,
+    });
+    const response = await axios.get<Wallet[]>(url, {
+      headers: { Authorization: header },
+    });
+    return {
+      props: {
+        wallets: response.data,
+      },
+    };
+  } catch (error) {
+    console.log("Failed to load wallets!");
+    return {
+      props: {
+        wallets: [],
+      },
+    };
+  }
+}
+
+const CurrencyRow = ({ wallet }: { wallet: Wallet }) => {
+  return (
+    <tr className="hover:bg-gray-200 h-16">
+      <td className="text-center p-2">
+        {wallet.currency.icon && (
+          <Image
+            src={wallet.currency.icon}
+            alt={wallet.currency.code}
+            width={50}
+            height={50}
+          />
+        )}
+      </td>
+      <td>
+        <p>{wallet.currency.name}</p>
+        <p className="text-gray-500">{wallet.currency.code}</p>
+      </td>
+      <td>{wallet.balance}</td>
+      <td></td>
+    </tr>
+  );
+};
+
+const Wallets = ({ wallets }: { wallets: Wallet[] }) => {
   return (
     <>
-      <Navbar />
-      <div className="border-gray-500 border-2 rounded-md max-w-2xl mx-auto mt-5 text-center p-2">
-        <button
-          className="bg-gray-500 p-2 rounded-md text-white"
-          onClick={getWallets}
-        >
-          List Wallets
-        </button>
-        <table className="divide-y divide-gray-300 m-auto">
-          <thead className="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                ID
-              </th>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                Currency
-              </th>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                Balance
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {wallets &&
-              wallets.map((wallet: any) => (
-                <tr key={wallet.id}>
-                  <td>{wallet.id}</td>
-                  <td>{wallet.currency.code}</td>
-                  <td>{wallet.balance}</td>
+      <Head>
+        <title>WiiQare | Wallets</title>
+      </Head>
+      <Dashboard title="Wallets">
+        {wallets && (
+          <div className="rounded-lg border-2">
+            <table className="w-full">
+              <tbody>
+                <tr>
+                  <td
+                    className="pl-4 py-4 bg-gray-200 font-semibold"
+                    colSpan={4}
+                  >
+                    Fiat
+                  </td>
                 </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+                {wallets
+                  .filter((wallet) => wallet.currency.fiat)
+                  .map((wallet: any) => (
+                    <CurrencyRow key={wallet.id} wallet={wallet} />
+                  ))}
+                <tr>
+                  <td
+                    className="pl-4 py-4 bg-gray-200 font-semibold"
+                    colSpan={4}
+                  >
+                    Cryptocurrency
+                  </td>
+                </tr>
+                {wallets
+                  .filter((wallet) => !wallet.currency.fiat)
+                  .map((wallet: any) => (
+                    <CurrencyRow key={wallet.id} wallet={wallet} />
+                  ))}
+              </tbody>
+            </table>
+            {/* <p>{JSON.stringify(wallets[1])}</p> */}
+          </div>
+        )}
+      </Dashboard>
     </>
   );
 };
