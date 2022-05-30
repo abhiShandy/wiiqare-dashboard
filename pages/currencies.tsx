@@ -1,5 +1,5 @@
 import axios from "axios";
-import Navbar from "../components/navbar";
+import Dashboard from "../components/dashboard";
 
 type Currency = {
   name: string;
@@ -10,10 +10,9 @@ type Currency = {
 
 const Currencies = ({ currencies }: { currencies: Currency[] }) => {
   return (
-    <>
-      <Navbar />
-      <table className="divide-y divide-gray-300 m-auto">
-        <thead className="bg-gray-50">
+    <Dashboard title="Currencies">
+      <table className="m-auto">
+        <thead>
           <tr>
             <th
               scope="col"
@@ -41,9 +40,9 @@ const Currencies = ({ currencies }: { currencies: Currency[] }) => {
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200 bg-white">
+        <tbody>
           {currencies.map((currency) => (
-            <tr key={currency.name}>
+            <tr key={currency.name} className="hover:bg-gray-200">
               <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                 {currency.name}
               </td>
@@ -60,12 +59,12 @@ const Currencies = ({ currencies }: { currencies: Currency[] }) => {
           ))}
         </tbody>
       </table>
-    </>
+    </Dashboard>
   );
 };
 
 export async function getStaticProps() {
-  const response = await axios.get(
+  const response = await axios.get<Currency[]>(
     "https://api.coindirect.com/api/currency/fiat?max=500"
   );
   const currencies = response.data;

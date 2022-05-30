@@ -1,26 +1,11 @@
-/* This example requires Tailwind CSS v2.0+ */
 import React, { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import {
-  CalendarIcon,
-  CashIcon,
-  ChartBarIcon,
-  FolderIcon,
-  HomeIcon,
-  InboxIcon,
-  MenuIcon,
-  UsersIcon,
-  XIcon,
-} from "@heroicons/react/outline";
+import { CashIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import Image from "next/image";
 
 const navigation = [
-  // { name: "Home", href: "/", icon: HomeIcon, current: true },
   { name: "Wallets", href: "/wallets", icon: CashIcon, current: false },
-  // { name: "Projects", href: "#", icon: FolderIcon, current: false },
-  // { name: "Calendar", href: "#", icon: CalendarIcon, current: false },
-  // { name: "Documents", href: "#", icon: InboxIcon, current: false },
-  // { name: "Reports", href: "#", icon: ChartBarIcon, current: false },
+  { name: "Currencies", href: "/currencies", icon: CashIcon, current: false },
 ];
 
 function classNames(...classes: string[]) {
