@@ -19,6 +19,7 @@ const navigation = [
     icon: ShoppingBagIcon,
     current: false,
   },
+  { name: "Quotes", href: "/quotes", icon: CashIcon, current: false },
 ];
 
 function classNames(...classes: string[]) {
