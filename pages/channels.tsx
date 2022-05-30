@@ -1,19 +1,7 @@
 import Head from "next/head";
-import { MouseEventHandler, useState } from "react";
-import Navbar from "../components/navbar";
 import hawk from "hawk";
 import axios from "axios";
-
-const url = "https://api.sandbox.coindirect.com/api/v2/channel";
-const credentials: {
-  id: string;
-  key: string;
-  algorithm: "sha256" | "sha1";
-} = {
-  id: "ZPcwjLvvZ107UEhAgOvFqgl6Qmlz92pmJYTVOfPGl3SSseCJJuqF92nlkjSeEHSp",
-  key: "4KcRYkSBfJmPRpNO6ebccRLvuxlsq5pEtGzJjAuLleZvYMdiUP1xMEHJ9Chtkges",
-  algorithm: "sha256",
-};
+import Dashboard from "../components/dashboard";
 
 type Channel = {
   id: string;
@@ -23,47 +11,65 @@ type Channel = {
   dateCreated: string;
 };
 
-const Channels = () => {
-  const [channelReference, setChannelReference] = useState<string>("");
-  const [channels, setChannels] = useState<Channel[]>([]);
-  const getChannels: MouseEventHandler<HTMLButtonElement> = async (e) => {
-    e.preventDefault();
-    try {
-      const eg = `${url}?merchantId=e7c967e0-ea58-41de-aad2-c8a28d970baa`;
-      const { header } = hawk.client.header(eg, "GET", { credentials });
-      const response = await axios.get(eg, {
-        headers: { Authorization: header },
-      });
-      setChannels(response.data);
-    } catch (error) {
-      alert("Failed to load channels!");
-    }
-  };
-  const createChannel: MouseEventHandler<HTMLButtonElement> = async (e) => {
-    e.preventDefault();
-    try {
-      const { header } = hawk.client.header(url, "post", { credentials });
-      const response = await axios.post(
-        url,
-        {
-          merchantId: "e7c967e0-ea58-41de-aad2-c8a28d970baa",
-          payCurrency: "BTC",
-          displayCurrency: "USD",
-          reference: channelReference,
-        },
-        { headers: { Authorization: header } }
-      );
-    } catch (error) {
-      alert("Failed to create channel!");
-    }
-  };
+const credentials: {
+  id: string;
+  key: string;
+  algorithm: "sha256" | "sha1";
+} = {
+  id: process.env.COINDIRECT_HAWK_ID || "",
+  key: process.env.COINDIRECT_HAWK_KEY || "",
+  algorithm: "sha256",
+};
+
+export async function getServerSideProps() {
+  const url =
+    "https://api.sandbox.coindirect.com/api/v2/channel?merchantId=e7c967e0-ea58-41de-aad2-c8a28d970baa";
+  try {
+    const { header } = hawk.client.header(url, "GET", { credentials });
+    const response = await axios.get<Channel[]>(url, {
+      headers: { Authorization: header },
+    });
+    return {
+      props: {
+        channels: response.data,
+      },
+    };
+  } catch (error) {
+    console.log("Failed to load channels!");
+    return {
+      props: {
+        channels: [],
+      },
+    };
+  }
+}
+
+const Channels = ({ channels }: { channels: Channel[] }) => {
+  // const [channelReference, setChannelReference] = useState<string>("");
+  // const createChannel: MouseEventHandler<HTMLButtonElement> = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const { header } = hawk.client.header(url, "post", { credentials });
+  //     const response = await axios.post(
+  //       url,
+  //       {
+  //         merchantId: "e7c967e0-ea58-41de-aad2-c8a28d970baa",
+  //         payCurrency: "BTC",
+  //         displayCurrency: "USD",
+  //         reference: channelReference,
+  //       },
+  //       { headers: { Authorization: header } }
+  //     );
+  //   } catch (error) {
+  //     alert("Failed to create channel!");
+  //   }
+  // };
   return (
     <>
       <Head>
-        <title>Coindirect | Channels</title>
+        <title>WiiQare | Channels</title>
       </Head>
-      <Navbar />
-      <div className="border-gray-500 border-2 rounded-md max-w-xl mx-auto justify-center p-2 flex gap-2">
+      {/* <div className="border-gray-500 border-2 rounded-md max-w-xl mx-auto justify-center p-2 flex gap-2">
         <input
           type="text"
           className="text-center"
@@ -79,65 +85,41 @@ const Channels = () => {
         >
           Create Channel
         </button>
-      </div>
-      <div className="border-gray-500 border-2 rounded-md max-w-5xl mx-auto mt-5 text-center p-2">
-        <button
-          className="bg-gray-500 p-2 rounded-md text-white"
-          onClick={getChannels}
-        >
-          List Channels
-        </button>
-        <table className="divide-y divide-gray-300 m-auto mt-2">
-          <thead className="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                ID
-              </th>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                Reference
-              </th>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                Date Created
-              </th>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                Address
-              </th>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                Pay Currency
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {channels &&
-              channels.map((channel) => (
-                <tr key={channel.id}>
-                  <td className="text-left">{channel.id}</td>
-                  <td className="text-left">{channel.reference}</td>
-                  <td className="text-left">
-                    {new Date(channel.dateCreated).toISOString().slice(0, -8)}
-                  </td>
-                  <td className="text-left">{channel.address}</td>
-                  <td className="text-right">{channel.payCurrency}</td>
+      </div> */}
+      <Head>
+        <title>WiiQare | Channels</title>
+      </Head>
+      <Dashboard title="Channels">
+        {channels && (
+          <div className="border border-gray-200 rounded-md">
+            <table className="w-full">
+              <thead>
+                <tr className="text-left h-8">
+                  <th className="pl-4">Reference</th>
+                  <th>Date Created</th>
+                  <th>Address</th>
+                  <th className="text-right pr-4">Pay Currency</th>
                 </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+              </thead>
+              <tbody>
+                {channels.map((channel) => (
+                  <tr
+                    key={channel.id}
+                    className="hover:bg-gray-200 h-8 text-left"
+                  >
+                    <td className="pl-4">{channel.reference}</td>
+                    <td>
+                      {new Date(channel.dateCreated).toISOString().slice(0, -8)}
+                    </td>
+                    <td>{channel.address}</td>
+                    <td className="text-right pr-4">{channel.payCurrency}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Dashboard>
     </>
   );
 };
