@@ -1,6 +1,8 @@
 import axios from "axios";
 import hawk from "hawk";
+import Head from "next/head";
 import { useState } from "react";
+import Dashboard from "../components/dashboard";
 import Navbar from "../components/navbar";
 
 const credentials: {
@@ -8,66 +10,79 @@ const credentials: {
   key: string;
   algorithm: "sha256" | "sha1";
 } = {
-  id: "ZPcwjLvvZ107UEhAgOvFqgl6Qmlz92pmJYTVOfPGl3SSseCJJuqF92nlkjSeEHSp",
-  key: "4KcRYkSBfJmPRpNO6ebccRLvuxlsq5pEtGzJjAuLleZvYMdiUP1xMEHJ9Chtkges",
+  id: process.env.COINDIRECT_HAWK_ID || "",
+  key: process.env.COINDIRECT_HAWK_KEY || "",
   algorithm: "sha256",
 };
 
-const Merchants = () => {
-  const [merchants, setMerchants] = useState([]);
-  const getMerchants = async () => {
-    const getMerchantsURL =
-      "https://api.sandbox.coindirect.com/api/v1/merchant";
-    try {
-      const { header } = hawk.client.header(getMerchantsURL, "GET", {
-        credentials,
-      });
-      const response = await axios.get(getMerchantsURL, {
-        headers: { Authorization: header },
-      });
-      setMerchants(response.data);
-    } catch (error) {
-      alert("Failed to get merchants");
-    }
+type Merchant = {
+  merchantId: string;
+  displayName: string;
+  wallet: {
+    currency: {
+      code: string;
+    };
   };
+};
+
+export async function getServerSideProps() {
+  try {
+    const url = "https://api.sandbox.coindirect.com/api/v1/merchant";
+    const { header } = hawk.client.header(url, "GET", {
+      credentials,
+    });
+    const response = await axios.get<Merchant[]>(url, {
+      headers: { Authorization: header },
+    });
+    return {
+      props: {
+        merchants: response.data,
+      },
+    };
+  } catch (error) {
+    console.log("Failed to load merchants");
+    return {
+      props: {
+        merchants: [],
+      },
+    };
+  }
+}
+
+const Merchants = ({ merchants }: { merchants: Merchant[] }) => {
   return (
     <>
-      <Navbar />
-      <div className="border-gray-500 border-2 rounded-md max-w-2xl mx-auto mt-5 text-center p-2">
-        <button
-          className="bg-gray-500 p-2 rounded-md text-white"
-          onClick={getMerchants}
-        >
-          List Merchants
-        </button>
-        <table className="divide-y divide-gray-300 m-auto">
-          <thead className="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                Display Name
-              </th>
-              <th
-                scope="col"
-                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-              >
-                Merchant ID
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {merchants &&
-              merchants.map((merchant: any) => (
-                <tr key={merchant.merchantId}>
-                  <td>{merchant.displayName}</td>
-                  <td>{merchant.merchantId}</td>
+      <Head>
+        <title>WiiQare | Merchants</title>
+      </Head>
+      <Dashboard title="Merchants">
+        {merchants && (
+          <div className="rounded-lg border">
+            <table className="w-full">
+              <thead>
+                <tr className="text-left h-8 bg-gray-200">
+                  <th className="pl-4">Display Name</th>
+                  <th>Merchant ID</th>
+                  <th className="pr-4">Currency</th>
                 </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+              </thead>
+              <tbody>
+                {merchants &&
+                  merchants.map((merchant) => (
+                    <tr
+                      key={merchant.merchantId}
+                      className="hover:bg-gray-200 h-8"
+                    >
+                      <td className="pl-4">{merchant.displayName}</td>
+                      <td>{merchant.merchantId}</td>
+                      <td className="pr-4">{merchant.wallet.currency.code}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Dashboard>
     </>
   );
 };

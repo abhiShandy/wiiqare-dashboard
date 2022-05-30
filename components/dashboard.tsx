@@ -1,12 +1,23 @@
 import React, { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { CashIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import {
+  CashIcon,
+  MenuIcon,
+  ShoppingBagIcon,
+  XIcon,
+} from "@heroicons/react/outline";
 import Image from "next/image";
 
 const navigation = [
   { name: "Wallets", href: "/wallets", icon: CashIcon, current: false },
   { name: "Currencies", href: "/currencies", icon: CashIcon, current: false },
   { name: "Channels", href: "/channels", icon: CashIcon, current: false },
+  {
+    name: "Merchants",
+    href: "/merchants",
+    icon: ShoppingBagIcon,
+    current: false,
+  },
 ];
 
 function classNames(...classes: string[]) {

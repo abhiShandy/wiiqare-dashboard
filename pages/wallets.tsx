@@ -80,7 +80,7 @@ const Wallets = ({ wallets }: { wallets: Wallet[] }) => {
       </Head>
       <Dashboard title="Wallets">
         {wallets && (
-          <div className="rounded-lg border-2">
+          <div className="rounded-lg border">
             <table className="w-full">
               <tbody>
                 <tr>
@@ -93,7 +93,7 @@ const Wallets = ({ wallets }: { wallets: Wallet[] }) => {
                 </tr>
                 {wallets
                   .filter((wallet) => wallet.currency.fiat)
-                  .map((wallet: any) => (
+                  .map((wallet) => (
                     <CurrencyRow key={wallet.id} wallet={wallet} />
                   ))}
                 <tr>
@@ -106,7 +106,7 @@ const Wallets = ({ wallets }: { wallets: Wallet[] }) => {
                 </tr>
                 {wallets
                   .filter((wallet) => !wallet.currency.fiat)
-                  .map((wallet: any) => (
+                  .map((wallet) => (
                     <CurrencyRow key={wallet.id} wallet={wallet} />
                   ))}
               </tbody>
