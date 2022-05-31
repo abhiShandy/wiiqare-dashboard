@@ -9,6 +9,7 @@ type Channel = {
   id: string;
   address: string;
   reference: string;
+  displayCurrency: string;
   payCurrency: string;
   dateCreated: string;
 };
@@ -224,6 +225,7 @@ const Channels = ({ channels }: { channels: Channel[] }) => {
                   <th className="pl-4">Reference</th>
                   <th>Date Created</th>
                   <th>Address</th>
+                  <th className="text-right">Display Currency</th>
                   <th className="text-right pr-4">Pay Currency</th>
                 </tr>
               </thead>
@@ -238,6 +240,7 @@ const Channels = ({ channels }: { channels: Channel[] }) => {
                       {new Date(channel.dateCreated).toISOString().slice(0, -8)}
                     </td>
                     <td>{channel.address}</td>
+                    <td className="text-right">{channel.displayCurrency}</td>
                     <td className="text-right pr-4">{channel.payCurrency}</td>
                   </tr>
                 ))}
