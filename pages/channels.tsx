@@ -22,8 +22,9 @@ const credentials: {
 };
 
 export async function getServerSideProps() {
-  const url =
-    "https://api.sandbox.coindirect.com/api/v2/channel?merchantId=e7c967e0-ea58-41de-aad2-c8a28d970baa";
+  const url = `https://api.sandbox.coindirect.com/api/v2/channel?merchantId=${
+    process.env.MERCHANT_ID || ""
+  }`;
   try {
     const { header } = hawk.client.header(url, "GET", { credentials });
     const response = await axios.get<Channel[]>(url, {

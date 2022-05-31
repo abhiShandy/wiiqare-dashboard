@@ -27,8 +27,9 @@ const credentials: {
 
 export async function getServerSideProps() {
   try {
-    const merchantId = "e7c967e0-ea58-41de-aad2-c8a28d970baa";
-    const url = `https://api.sandbox.coindirect.com/api/v1/pay/summary?merchantId=${merchantId}`;
+    const url = `https://api.sandbox.coindirect.com/api/v1/pay/summary?merchantId=${
+      process.env.MERCHANT_ID || ""
+    }`;
     const { header } = hawk.client.header(url, "GET", {
       credentials,
     });
