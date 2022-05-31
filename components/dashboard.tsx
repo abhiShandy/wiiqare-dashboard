@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   CashIcon,
+  ChatIcon,
   MenuIcon,
   ShoppingBagIcon,
   XIcon,
@@ -13,7 +14,7 @@ const navigation = [
   { name: "Payments", href: "/payments", icon: CashIcon, current: false },
   { name: "Wallets", href: "/wallets", icon: CashIcon, current: false },
   { name: "Currencies", href: "/currencies", icon: CashIcon, current: false },
-  { name: "Quotes", href: "/quotes", icon: CashIcon, current: false },
+  { name: "Quotes", href: "/quotes", icon: ChatIcon, current: false },
   {
     name: "Merchants",
     href: "/merchants",
