@@ -5,7 +5,7 @@ import Image from "next/image";
 import React, { Fragment, useState } from "react";
 import useSWR from "swr";
 import Dashboard from "../components/dashboard";
-import { fetcher } from "./_utils";
+import { fetcher } from "../utils/fetcher";
 
 type Wallet = {
   id: string;

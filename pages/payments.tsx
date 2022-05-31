@@ -2,7 +2,7 @@ import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/outline";
 import Head from "next/head";
 import useSWR from "swr";
 import Dashboard from "../components/dashboard";
-import { fetcher } from "./_utils";
+import { fetcher } from "../utils/fetcher";
 
 type Payment = {
   uuid: string;

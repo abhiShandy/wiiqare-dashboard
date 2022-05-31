@@ -4,7 +4,7 @@ import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import useSWR from "swr";
 import axios from "axios";
-import { fetcher } from "./_utils";
+import { fetcher } from "../utils/fetcher";
 
 type Channel = {
   id: string;

@@ -1,9 +1,7 @@
-import axios from "axios";
-import hawk from "hawk";
 import Head from "next/head";
 import useSWR from "swr";
 import Dashboard from "../components/dashboard";
-import { fetcher } from "./_utils";
+import { fetcher } from "../utils/fetcher";
 
 type Merchant = {
   merchantId: string;
