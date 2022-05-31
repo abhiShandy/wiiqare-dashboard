@@ -11,8 +11,8 @@ const credentials: {
   key: string;
   algorithm: "sha256" | "sha1";
 } = {
-  id: process.env.COINDIRECT_HAWK_ID || "",
-  key: process.env.COINDIRECT_HAWK_KEY || "",
+  id: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_ID || "",
+  key: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_KEY || "",
   algorithm: "sha256",
 };
 
@@ -97,7 +97,7 @@ function AddWalletModal() {
       const { header } = hawk.client.header(url, "POST", {
         credentials,
       });
-      const response = await axios.post(
+      await axios.post(
         url,
         { currency, description },
         {

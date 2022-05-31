@@ -20,15 +20,15 @@ const credentials: {
   key: string;
   algorithm: "sha256" | "sha1";
 } = {
-  id: process.env.COINDIRECT_HAWK_ID || "",
-  key: process.env.COINDIRECT_HAWK_KEY || "",
+  id: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_ID || "",
+  key: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_KEY || "",
   algorithm: "sha256",
 };
 
 export async function getServerSideProps() {
   try {
     const url = `https://api.sandbox.coindirect.com/api/v1/pay/summary?merchantId=${
-      process.env.MERCHANT_ID || ""
+      process.env.NEXT_PUBLIC_MERCHANT_ID || ""
     }`;
     const { header } = hawk.client.header(url, "GET", {
       credentials,

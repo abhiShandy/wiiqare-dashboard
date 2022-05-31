@@ -8,8 +8,8 @@ const credentials: {
   key: string;
   algorithm: "sha256" | "sha1";
 } = {
-  id: process.env.COINDIRECT_HAWK_ID || "",
-  key: process.env.COINDIRECT_HAWK_KEY || "",
+  id: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_ID || "",
+  key: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_KEY || "",
   algorithm: "sha256",
 };
 
