@@ -1,8 +1,8 @@
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/outline";
-import axios from "axios";
-import hawk from "hawk";
 import Head from "next/head";
+import useSWR from "swr";
 import Dashboard from "../components/dashboard";
+import { fetcher } from "./_utils";
 
 type Payment = {
   uuid: string;
@@ -15,43 +15,9 @@ type Payment = {
   };
 };
 
-const credentials: {
-  id: string;
-  key: string;
-  algorithm: "sha256" | "sha1";
-} = {
-  id: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_ID || "",
-  key: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_KEY || "",
-  algorithm: "sha256",
-};
-
-export async function getServerSideProps() {
-  try {
-    const url = `https://api.sandbox.coindirect.com/api/v1/pay/summary?merchantId=${
-      process.env.NEXT_PUBLIC_MERCHANT_ID || ""
-    }`;
-    const { header } = hawk.client.header(url, "GET", {
-      credentials,
-    });
-    const response = await axios.get<Payment[]>(url, {
-      headers: { Authorization: header },
-    });
-    return {
-      props: {
-        payments: response.data,
-      },
-    };
-  } catch (error) {
-    console.log("Failed to get payments");
-    return {
-      props: {
-        payments: [],
-      },
-    };
-  }
-}
-
-const Payments = ({ payments }: { payments: Payment[] }) => {
+const Payments = () => {
+  const { data: payments, error } = useSWR<Payment[]>("/api/payments", fetcher);
+  if (error) return <p>Erro fetching payments!</p>;
   return (
     <>
       <Head>

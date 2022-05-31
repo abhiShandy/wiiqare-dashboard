@@ -4,6 +4,7 @@ import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import useSWR from "swr";
 import axios from "axios";
+import { fetcher } from "./_utils";
 
 type Channel = {
   id: string;
@@ -169,11 +170,6 @@ function CreateChannelModal() {
     </>
   );
 }
-
-const fetcher = async (url: string) => {
-  const response = await fetch(url);
-  return response.json();
-};
 
 const Channels = () => {
   const { data: channels, error } = useSWR<Channel[]>("/api/channels", fetcher);

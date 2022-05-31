@@ -1,18 +1,7 @@
 import axios from "axios";
 import hawk from "hawk";
 import { NextApiHandler } from "next";
-
-const MERCHANT_ID: string = process.env.MERCHANT_ID || "";
-
-const credentials: {
-  id: string;
-  key: string;
-  algorithm: "sha256" | "sha1";
-} = {
-  id: process.env.COINDIRECT_HAWK_ID || "",
-  key: process.env.COINDIRECT_HAWK_KEY || "",
-  algorithm: "sha256",
-};
+import { credentials, MERCHANT_ID } from "./_common";
 
 const Channels: NextApiHandler = async (request, response) => {
   if (request.method === "GET") {
