@@ -3,6 +3,7 @@ import Dashboard from "../components/dashboard";
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import useSWR from "swr";
+import axios from "axios";
 
 type Channel = {
   id: string;
@@ -29,20 +30,14 @@ function CreateChannelModal() {
 
   const createChannel: React.MouseEventHandler = async (e) => {
     try {
-      // const url = "https://api.sandbox.coindirect.com/api/v2/channel";
-      // const { header } = hawk.client.header(url, "POST", { credentials });
-      // await axios.post(
-      //   url,
-      //   {
-      //     merchantId: MERCHANT_ID,
-      //     payCurrency,
-      //     displayCurrency,
-      //     reference: channelRef,
-      //   },
-      //   { headers: { Authorization: header } }
-      // );
+      const url = "/api/channels";
+      await axios.post(url, {
+        payCurrency,
+        displayCurrency,
+        reference: channelRef,
+      });
+      closeModal();
     } catch (error) {
-      console.log(error);
       console.log("Failed to create channel!");
     }
   };

@@ -26,6 +26,23 @@ const Channels: NextApiHandler = async (request, response) => {
     } catch (error) {
       response.status(500);
     }
+  } else if (request.method === "POST") {
+    try {
+      const { displayCurrency, payCurrency, reference } = request.body;
+      const url = `https://api.sandbox.coindirect.com/api/v2/channel`;
+      const { header } = hawk.client.header(url, "POST", { credentials });
+      await axios.post(
+        url,
+        { merchantId: MERCHANT_ID, displayCurrency, payCurrency, reference },
+        {
+          headers: { Authorization: header },
+        }
+      );
+      response.status(200).json({});
+    } catch (error) {
+      console.log(error);
+      response.status(500).json({});
+    }
   }
 };
 
