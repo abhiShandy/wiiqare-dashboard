@@ -1,17 +1,7 @@
-import axios from "axios";
-import hawk from "hawk";
 import Head from "next/head";
+import useSWR from "swr";
 import Dashboard from "../components/dashboard";
-
-const credentials: {
-  id: string;
-  key: string;
-  algorithm: "sha256" | "sha1";
-} = {
-  id: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_ID || "",
-  key: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_KEY || "",
-  algorithm: "sha256",
-};
+import { fetcher } from "./_utils";
 
 type Quote = {
   id: string;
@@ -21,31 +11,9 @@ type Quote = {
   dateCreated: string;
 };
 
-export async function getServerSideProps() {
-  try {
-    const url = "https://api.sandbox.coindirect.com/api/v1/quote";
-    const { header } = hawk.client.header(url, "GET", {
-      credentials,
-    });
-    const response = await axios.get(url, {
-      headers: { Authorization: header },
-    });
-    return {
-      props: {
-        quotes: response.data,
-      },
-    };
-  } catch (error) {
-    console.log("Failed to get Quotes");
-    return {
-      props: {
-        quotes: [],
-      },
-    };
-  }
-}
-
-const Quotes = ({ quotes }: { quotes: Quote[] }) => {
+const Quotes = () => {
+  const { data: quotes, error } = useSWR<Quote[]>("/api/quotes", fetcher);
+  if (error) return <p>Error fetching quotes!</p>;
   return (
     <>
       <Head>

@@ -1,6 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
 import axios from "axios";
-import hawk from "hawk";
 import Head from "next/head";
 import Image from "next/image";
 import React, { Fragment, useState } from "react";
