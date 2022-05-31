@@ -4,17 +4,9 @@ import hawk from "hawk";
 import Head from "next/head";
 import Image from "next/image";
 import React, { Fragment, useState } from "react";
+import useSWR from "swr";
 import Dashboard from "../components/dashboard";
-
-const credentials: {
-  id: string;
-  key: string;
-  algorithm: "sha256" | "sha1";
-} = {
-  id: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_ID || "",
-  key: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_KEY || "",
-  algorithm: "sha256",
-};
+import { fetcher } from "./_utils";
 
 type Wallet = {
   id: string;
@@ -27,30 +19,6 @@ type Wallet = {
   };
   description: string;
 };
-
-export async function getServerSideProps() {
-  const url = "https://api.sandbox.coindirect.com/api/wallet";
-  try {
-    const { header } = hawk.client.header(url, "GET", {
-      credentials,
-    });
-    const response = await axios.get<Wallet[]>(url, {
-      headers: { Authorization: header },
-    });
-    return {
-      props: {
-        wallets: response.data,
-      },
-    };
-  } catch (error) {
-    console.log("Failed to load wallets!");
-    return {
-      props: {
-        wallets: [],
-      },
-    };
-  }
-}
 
 const CurrencyRow = ({ wallet }: { wallet: Wallet }) => {
   return (
@@ -92,18 +60,11 @@ function AddWalletModal() {
 
   const createWallet: React.MouseEventHandler = async (e) => {
     try {
-      const url = "https://api.sandbox.coindirect.com/api/wallet";
-      console.log(currency, description);
-      const { header } = hawk.client.header(url, "POST", {
-        credentials,
+      const url = "/api/wallets";
+      await axios.post(url, {
+        currency,
+        description,
       });
-      await axios.post(
-        url,
-        { currency, description },
-        {
-          headers: { Authorization: header },
-        }
-      );
       closeModal();
     } catch (error) {
       console.log("Failed to create wallet!");
@@ -219,7 +180,9 @@ function AddWalletModal() {
   );
 }
 
-const Wallets = ({ wallets }: { wallets: Wallet[] }) => {
+const Wallets = () => {
+  const { data: wallets, error } = useSWR<Wallet[]>("/api/wallets", fetcher);
+  if (error) return <p>Error feching wallets!</p>;
   return (
     <>
       <Head>
