@@ -1,9 +1,8 @@
 import Head from "next/head";
-import hawk from "hawk";
-import axios from "axios";
 import Dashboard from "../components/dashboard";
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import useSWR from "swr";
 
 type Channel = {
   id: string;
@@ -13,40 +12,6 @@ type Channel = {
   payCurrency: string;
   dateCreated: string;
 };
-
-const MERCHANT_ID = process.env.NEXT_PUBLIC_MERCHANT_ID || "";
-
-const credentials: {
-  id: string;
-  key: string;
-  algorithm: "sha256" | "sha1";
-} = {
-  id: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_ID || "",
-  key: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_KEY || "",
-  algorithm: "sha256",
-};
-
-export async function getServerSideProps() {
-  const url = `https://api.sandbox.coindirect.com/api/v2/channel?merchantId=${MERCHANT_ID}`;
-  try {
-    const { header } = hawk.client.header(url, "GET", { credentials });
-    const response = await axios.get<Channel[]>(url, {
-      headers: { Authorization: header },
-    });
-    return {
-      props: {
-        channels: response.data,
-      },
-    };
-  } catch (error) {
-    console.log("Failed to load channels!");
-    return {
-      props: {
-        channels: [],
-      },
-    };
-  }
-}
 
 function CreateChannelModal() {
   let [isOpen, setIsOpen] = useState(false);
@@ -64,18 +29,18 @@ function CreateChannelModal() {
 
   const createChannel: React.MouseEventHandler = async (e) => {
     try {
-      const url = "https://api.sandbox.coindirect.com/api/v2/channel";
-      const { header } = hawk.client.header(url, "POST", { credentials });
-      await axios.post(
-        url,
-        {
-          merchantId: MERCHANT_ID,
-          payCurrency,
-          displayCurrency,
-          reference: channelRef,
-        },
-        { headers: { Authorization: header } }
-      );
+      // const url = "https://api.sandbox.coindirect.com/api/v2/channel";
+      // const { header } = hawk.client.header(url, "POST", { credentials });
+      // await axios.post(
+      //   url,
+      //   {
+      //     merchantId: MERCHANT_ID,
+      //     payCurrency,
+      //     displayCurrency,
+      //     reference: channelRef,
+      //   },
+      //   { headers: { Authorization: header } }
+      // );
     } catch (error) {
       console.log(error);
       console.log("Failed to create channel!");
@@ -210,7 +175,14 @@ function CreateChannelModal() {
   );
 }
 
-const Channels = ({ channels }: { channels: Channel[] }) => {
+const fetcher = async (url: string) => {
+  const response = await fetch(url);
+  return response.json();
+};
+
+const Channels = () => {
+  const { data: channels, error } = useSWR<Channel[]>("/api/channels", fetcher);
+  if (error) return <p>Error fetching channels!</p>;
   return (
     <>
       <Head>
