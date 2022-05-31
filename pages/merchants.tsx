@@ -1,17 +1,9 @@
 import axios from "axios";
 import hawk from "hawk";
 import Head from "next/head";
+import useSWR from "swr";
 import Dashboard from "../components/dashboard";
-
-const credentials: {
-  id: string;
-  key: string;
-  algorithm: "sha256" | "sha1";
-} = {
-  id: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_ID || "",
-  key: process.env.NEXT_PUBLIC_COINDIRECT_HAWK_KEY || "",
-  algorithm: "sha256",
-};
+import { fetcher } from "./_utils";
 
 type Merchant = {
   merchantId: string;
@@ -23,31 +15,12 @@ type Merchant = {
   };
 };
 
-export async function getServerSideProps() {
-  try {
-    const url = "https://api.sandbox.coindirect.com/api/v1/merchant";
-    const { header } = hawk.client.header(url, "GET", {
-      credentials,
-    });
-    const response = await axios.get<Merchant[]>(url, {
-      headers: { Authorization: header },
-    });
-    return {
-      props: {
-        merchants: response.data,
-      },
-    };
-  } catch (error) {
-    console.log("Failed to load merchants");
-    return {
-      props: {
-        merchants: [],
-      },
-    };
-  }
-}
-
-const Merchants = ({ merchants }: { merchants: Merchant[] }) => {
+const Merchants = () => {
+  const { data: merchants, error } = useSWR<Merchant[]>(
+    "/api/merchants",
+    fetcher
+  );
+  if (error) return <p>Error fetching Merchants!</p>;
   return (
     <>
       <Head>
