@@ -43,14 +43,24 @@ const Admins = ({ admins }: { admins: Admin[] }) => {
 export const getServerSideProps = async () => {
   const client = new MongoClient(process.env.MONGODB_URL || "");
 
-  await client.connect();
+  try {
+    await client.connect();
+  } catch (error) {
+    console.log("Error connecting to MongoDB");
+    return { props: { admins: [] } };
+  }
 
   const cursor = client.db("admins").collection<Admin>("web").find();
 
   const projectCursor = cursor.project<Admin>({ _id: 0 });
-  const admins = await projectCursor.toArray();
 
-  return { props: { admins: admins } };
+  try {
+    const admins = await projectCursor.toArray();
+    return { props: { admins: admins } };
+  } catch (error) {
+    console.log("Error converting to array");
+    return { props: { admins: [] } };
+  }
 };
 
 export default Admins;
