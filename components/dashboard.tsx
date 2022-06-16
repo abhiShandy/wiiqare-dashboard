@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/outline";
 import Image from "next/image";
 import Link from "next/link";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 type Navigation = {
   name: string;
@@ -45,6 +46,8 @@ export default function Dashboard({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const { data: session } = useSession();
 
   return (
     <>
@@ -180,6 +183,21 @@ export default function Dashboard({
                   </a>
                 ))}
               </nav>
+              {session ? (
+                <button
+                  className="text-white text-sm font-medium border border-white rounded-md h-8 mx-4"
+                  onClick={() => signOut()}
+                >
+                  Sign out
+                </button>
+              ) : (
+                <button
+                  className="text-white text-sm font-medium border border-white rounded-md h-8 mx-4"
+                  onClick={() => signIn()}
+                >
+                  Sign in
+                </button>
+              )}
             </div>
           </div>
         </div>
