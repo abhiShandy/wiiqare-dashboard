@@ -32,6 +32,12 @@ const navigation: Navigation[] = [
     current: false,
   },
   { name: "Admins", href: "/admins", icon: UserGroupIcon, current: false },
+  {
+    name: "Customers",
+    href: "/customers",
+    icon: UserGroupIcon,
+    current: false,
+  },
 ];
 
 function classNames(...classes: string[]) {
