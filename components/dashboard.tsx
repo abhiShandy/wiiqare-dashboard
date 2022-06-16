@@ -5,12 +5,20 @@ import {
   ChatIcon,
   MenuIcon,
   ShoppingBagIcon,
+  UserGroupIcon,
   XIcon,
 } from "@heroicons/react/outline";
 import Image from "next/image";
 import Link from "next/link";
 
-const navigation = [
+type Navigation = {
+  name: string;
+  href: string;
+  icon: (props: React.ComponentProps<"svg">) => JSX.Element;
+  current: boolean;
+};
+
+const navigation: Navigation[] = [
   { name: "Channels", href: "/channels", icon: CashIcon, current: false },
   { name: "Payments", href: "/payments", icon: CashIcon, current: false },
   { name: "Wallets", href: "/wallets", icon: CashIcon, current: false },
@@ -22,6 +30,7 @@ const navigation = [
     icon: ShoppingBagIcon,
     current: false,
   },
+  { name: "Admins", href: "/admins", icon: UserGroupIcon, current: false },
 ];
 
 function classNames(...classes: string[]) {
