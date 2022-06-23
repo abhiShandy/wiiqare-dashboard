@@ -2,20 +2,28 @@ import { MongoClient, WithId } from "mongodb";
 import Head from "next/head";
 import Dashboard from "../components/dashboard";
 
-type Customer = {
+type Expat = {
   id: string;
   email: string;
   name?: string;
   kyc: string;
 };
 
-const Customers = ({ customers }: { customers: Customer[] }) => {
+type Patient = Omit<Expat, "kyc">;
+
+type Props = {
+  expats: Expat[];
+  patients: Patient[];
+};
+
+const Customers = ({ expats, patients }: Props) => {
   return (
     <>
       <Head>
         <title>WiiQare | Customers</title>
       </Head>
       <Dashboard title="Customers">
+        <h2 className="text-xl font-bold m-4">Expats</h2>
         <div className="border border-gray-200 rounded-md">
           <table className="w-full">
             <thead>
@@ -27,15 +35,37 @@ const Customers = ({ customers }: { customers: Customer[] }) => {
               </tr>
             </thead>
             <tbody>
-              {customers.map((customer) => (
+              {expats.map((expat) => (
+                <tr key={expat.id} className="hover:bg-gray-200 h-8 text-left">
+                  <td className="pl-4">{expat.id}</td>
+                  <td>{expat.email}</td>
+                  <td>{expat.name ? expat.name : "N/A"}</td>
+                  <td className="text-right pr-4">{expat.kyc}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <h2 className="text-xl font-bold m-4">Patients</h2>
+        <div className="border border-gray-200 rounded-md">
+          <table className="w-full">
+            <thead>
+              <tr className="text-left h-8">
+                <th className="pl-4">ID</th>
+                <th>Email</th>
+                <th>Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {patients.map((patient) => (
                 <tr
-                  key={customer.id}
+                  key={patient.id}
                   className="hover:bg-gray-200 h-8 text-left"
                 >
-                  <td className="pl-4">{customer.id}</td>
-                  <td>{customer.email}</td>
-                  <td>{customer.name ? customer.name : "N/A"}</td>
-                  <td className="text-right pr-4">{customer.kyc}</td>
+                  <td className="pl-4">{patient.id}</td>
+                  <td>{patient.email}</td>
+                  <td>{patient.name ? patient.name : "N/A"}</td>
                 </tr>
               ))}
             </tbody>
@@ -46,26 +76,33 @@ const Customers = ({ customers }: { customers: Customer[] }) => {
   );
 };
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (): Promise<{ props: Props }> => {
   const client = new MongoClient(process.env.MONGODB_URL || "");
 
   try {
     await client.connect();
   } catch (error) {
     console.log("Error connecting to MongoDB");
-    return { props: { customers: [] } };
+    return { props: { expats: [], patients: [] } };
   }
 
-  const cursor = client.db("customers").collection<Customer>("expats").find();
+  const expatCursor = client.db("customers").collection<Expat>("expats").find();
+  const projectExpatCursor = expatCursor.project<Expat>({ _id: 0 });
 
-  const projectCursor = cursor.project<Customer>({ _id: 0 });
+  const patientCursor = client
+    .db("customers")
+    .collection<Patient>("patients")
+    .find();
+  const projectPatientCursor = patientCursor.project<Patient>({ _id: 0 });
 
   try {
-    const customers = await projectCursor.toArray();
-    return { props: { customers: customers } };
+    const expats = await projectExpatCursor.toArray();
+    const patients = await projectPatientCursor.toArray();
+
+    return { props: { expats, patients } };
   } catch (error) {
-    console.log("Error converting to array");
-    return { props: { customers: [] } };
+    console.log("Error converting patients and/or expats to array");
+    return { props: { expats: [], patients: [] } };
   }
 };
 
