@@ -260,7 +260,9 @@ const Customers = ({ expats, patients }: Props) => {
                   key={patient.id}
                   className="hover:bg-gray-200 h-8 text-left"
                 >
-                  <td className="pl-4">{patient.id}</td>
+                  <td className="pl-4">
+                    <Link href={`/patients/${patient.id}`}>{patient.id}</Link>
+                  </td>
                   <td>{patient.email}</td>
                   <td>{patient.name ? patient.name : "N/A"}</td>
                 </tr>

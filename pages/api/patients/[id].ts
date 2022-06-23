@@ -1,8 +1,8 @@
 import { MongoClient } from "mongodb";
 import { NextApiHandler } from "next";
-import { Expat } from "../../customers";
+import { Patient } from "../../customers";
 
-const GetExpat: NextApiHandler = async (request, response) => {
+const GetPatient: NextApiHandler = async (request, response) => {
   if (request.method !== "GET") response.status(300);
   const { id } = request.query;
   const client = new MongoClient(process.env.MONGODB_URL || "");
@@ -16,14 +16,14 @@ const GetExpat: NextApiHandler = async (request, response) => {
   try {
     const cursor = await client
       .db("customers")
-      .collection<Expat>("expats")
+      .collection<Patient>("patients")
       .findOne({ id });
     if (cursor) response.status(200).json(cursor);
     else response.status(404);
   } catch (error) {
-    console.log("Error finding Expat!");
+    console.log("Error finding Patient!");
     response.status(500);
   }
 };
 
-export default GetExpat;
+export default GetPatient;
