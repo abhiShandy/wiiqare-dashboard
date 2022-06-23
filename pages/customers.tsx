@@ -2,6 +2,7 @@ import { Dialog } from "@headlessui/react";
 import axios from "axios";
 import { MongoClient, WithId } from "mongodb";
 import Head from "next/head";
+import Link from "next/link";
 import { useState } from "react";
 import Dashboard from "../components/dashboard";
 import Modal from "../components/modal";
@@ -228,7 +229,9 @@ const Customers = ({ expats, patients }: Props) => {
             <tbody>
               {expats.map((expat) => (
                 <tr key={expat.id} className="hover:bg-gray-200 h-8 text-left">
-                  <td className="pl-4">{expat.id}</td>
+                  <td className="pl-4">
+                    <Link href={`/expats/${expat.id}`}>{expat.id}</Link>
+                  </td>
                   <td>{expat.email}</td>
                   <td>{expat.name ? expat.name : "N/A"}</td>
                   <td className="text-right pr-4">{expat.kyc}</td>

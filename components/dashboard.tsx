@@ -49,7 +49,7 @@ export default function Dashboard({
   children,
 }: {
   title: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

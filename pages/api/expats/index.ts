@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 import { NextApiHandler } from "next";
-import { Expat } from "../customers";
+import { Expat } from "../../customers";
 import { v4 as uuid } from "uuid";
 
 const Expats: NextApiHandler = async (request, response) => {
