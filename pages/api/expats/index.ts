@@ -25,6 +25,7 @@ const Expats: NextApiHandler = async (request, response) => {
       console.log("Error creating Expat!");
       response.status(500);
     }
+    await client.close();
   }
 };
 

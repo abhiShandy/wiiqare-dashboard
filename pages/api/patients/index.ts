@@ -25,6 +25,7 @@ const Patients: NextApiHandler = async (request, response) => {
       console.log("Error creating Patient!");
       response.status(500);
     }
+    await client.close();
   }
 
   if (request.method === "GET") {
@@ -50,6 +51,7 @@ const Patients: NextApiHandler = async (request, response) => {
       console.log("Error converting patients and/or expats to array");
       response.status(500);
     }
+    await client.close();
   }
 };
 

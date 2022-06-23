@@ -24,6 +24,7 @@ const GetExpat: NextApiHandler = async (request, response) => {
     console.log("Error finding Expat!");
     response.status(500);
   }
+  await client.close();
 };
 
 export default GetExpat;

@@ -303,6 +303,7 @@ export const getServerSideProps = async (): Promise<{ props: Props }> => {
     console.log("Error converting patients and/or expats to array");
     return { props: { expats: [], patients: [] } };
   }
+  await client.close();
 };
 
 export default Customers;

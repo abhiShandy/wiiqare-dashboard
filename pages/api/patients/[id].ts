@@ -24,6 +24,7 @@ const GetPatient: NextApiHandler = async (request, response) => {
     console.log("Error finding Patient!");
     response.status(500);
   }
+  await client.close();
 };
 
 export default GetPatient;

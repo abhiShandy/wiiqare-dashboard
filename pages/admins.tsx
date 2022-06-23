@@ -61,6 +61,7 @@ export const getServerSideProps = async () => {
     console.log("Error converting to array");
     return { props: { admins: [] } };
   }
+  await client.close();
 };
 
 export default Admins;

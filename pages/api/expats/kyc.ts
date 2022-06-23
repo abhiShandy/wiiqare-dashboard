@@ -19,6 +19,7 @@ const KYC: NextApiHandler = async (request, response) => {
         .db("customers")
         .collection<Expat>("expats")
         .updateOne({ id }, { $set: { kyc: "complete" } });
+      await client.close();
       response.status(200).json(data);
     } catch (error) {
       console.log("Error updating KYC");
@@ -26,6 +27,7 @@ const KYC: NextApiHandler = async (request, response) => {
 
       response.status(500).json({});
     }
+    await client.close();
   }
 };
 
