@@ -26,6 +26,31 @@ const Patients: NextApiHandler = async (request, response) => {
       response.status(500);
     }
   }
+
+  if (request.method === "GET") {
+    const client = new MongoClient(process.env.MONGODB_URL || "");
+
+    try {
+      await client.connect();
+    } catch (error) {
+      console.log("Error connecting to MongoDB");
+    }
+
+    const patientCursor = client
+      .db("customers")
+      .collection<Patient>("patients")
+      .find();
+    const projectPatientCursor = patientCursor.project<Patient>({ _id: 0 });
+
+    try {
+      const patients = await projectPatientCursor.toArray();
+
+      response.status(200).json(patients);
+    } catch (error) {
+      console.log("Error converting patients and/or expats to array");
+      response.status(500);
+    }
+  }
 };
 
 export default Patients;

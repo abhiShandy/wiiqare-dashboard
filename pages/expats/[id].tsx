@@ -1,9 +1,69 @@
+import { Dialog } from "@headlessui/react";
 import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 import Dashboard from "../../components/dashboard";
+import Modal from "../../components/modal";
 import { fetcher } from "../../utils/fetcher";
+import { Patient } from "../customers";
+
+const SendMoney = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [patients, setPatients] = useState<Patient[]>([]);
+
+  const getPatients = async () => {
+    try {
+      const response = await axios.get("/api/patients");
+      setPatients(response.data);
+    } catch (error) {
+      console.log("error getting patients!");
+    }
+  };
+
+  useEffect(() => {
+    getPatients();
+  });
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
+  return (
+    <Modal
+      buttonText="Send Money"
+      isOpen={isOpen}
+      closeModal={closeModal}
+      openModal={openModal}
+    >
+      <Dialog.Title
+        as="h3"
+        className="text-lg font-medium leading-6 text-gray-900"
+      >
+        Send Money
+      </Dialog.Title>
+
+      <div className="mt-2">
+        <form>
+          <div className="flex flex-col my-2">
+            <label htmlFor="email" className="my-1">
+              Email
+            </label>
+            <select>
+              {patients.map((patient) => (
+                <option key={patient.id}>{patient.email}</option>
+              ))}
+            </select>
+          </div>
+        </form>
+      </div>
+    </Modal>
+  );
+};
 
 const Expat = () => {
   const router = useRouter();
@@ -41,6 +101,7 @@ const Expat = () => {
             Mark KYC as Complete
           </button>
         )}
+        {data.kyc === "complete" && <SendMoney />}
       </Dashboard>
     </>
   );
