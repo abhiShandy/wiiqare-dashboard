@@ -1,3 +1,4 @@
+import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import useSWR from "swr";
@@ -14,6 +15,16 @@ const Expat = () => {
 
   if (!data) return <p>Loading...</p>;
 
+  const kycComplete = async () => {
+    try {
+      const response = await axios.post("/api/expats/kyc", { id: data.id });
+      console.log(response.data);
+      alert("KYC marked as complete");
+    } catch (error) {
+      alert("Failed to complete KYC");
+    }
+  };
+
   return (
     <>
       <Head>
@@ -22,9 +33,14 @@ const Expat = () => {
       <Dashboard title={data.name}>
         <div className="text-lg">Email: {data.email}</div>
         <div className="text-lg">KYC: {data.kyc}</div>
-        {/* <button className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white">
-          Mark KYC as Complete
-        </button> */}
+        {data.kyc !== "complete" && (
+          <button
+            className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white"
+            onClick={kycComplete}
+          >
+            Mark KYC as Complete
+          </button>
+        )}
       </Dashboard>
     </>
   );
