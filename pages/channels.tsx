@@ -45,7 +45,12 @@ function CreateChannelModal() {
   };
 
   return (
-    <Modal isOpen={isOpen} openModal={openModal} closeModal={closeModal}>
+    <Modal
+      buttonText="Create Channel"
+      isOpen={isOpen}
+      openModal={openModal}
+      closeModal={closeModal}
+    >
       <Dialog.Title
         as="h3"
         className="text-lg font-medium leading-6 text-gray-900"
