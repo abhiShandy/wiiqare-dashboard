@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import Dashboard from "../../components/dashboard";
+import Deposit from "../../components/deposit";
 import { fetcher } from "../../utils/fetcher";
 
 const Expat = () => {
@@ -41,6 +42,7 @@ const Expat = () => {
             Mark KYC as Complete
           </button>
         )}
+        {data.kyc == "complete" && <Deposit />}
       </Dashboard>
     </>
   );
