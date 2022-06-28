@@ -168,7 +168,7 @@ const Channels = () => {
             </table>
           </div>
         )}
-        <CreateChannelModal />
+        {/* <CreateChannelModal /> */}
       </Dashboard>
     </>
   );
