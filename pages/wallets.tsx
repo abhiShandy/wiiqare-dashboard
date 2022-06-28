@@ -8,19 +8,7 @@ import Dashboard from "../components/dashboard";
 import Modal from "../components/modal";
 import { fetcher } from "../utils/fetcher";
 
-type Wallet = {
-  id: string;
-  balance: string;
-  currency: {
-    code: string;
-    name: string;
-    icon: string;
-    fiat: boolean;
-  };
-  description: string;
-};
-
-const CurrencyRow = ({ wallet }: { wallet: Wallet }) => {
+const CurrencyRow = ({ wallet }: { wallet: WiiQare.Wallet }) => {
   return (
     <tr className="hover:bg-gray-200 h-16">
       <td className="text-center p-2">
@@ -142,7 +130,10 @@ function AddWalletModal() {
 }
 
 const Wallets = () => {
-  const { data: wallets, error } = useSWR<Wallet[]>("/api/wallets", fetcher);
+  const { data: wallets, error } = useSWR<WiiQare.Wallet[]>(
+    "/api/wallets",
+    fetcher
+  );
   if (error) return <p>Error feching wallets!</p>;
   return (
     <>

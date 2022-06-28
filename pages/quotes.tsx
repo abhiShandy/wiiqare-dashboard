@@ -3,16 +3,11 @@ import useSWR from "swr";
 import Dashboard from "../components/dashboard";
 import { fetcher } from "../utils/fetcher";
 
-type Quote = {
-  id: string;
-  from: string;
-  to: string;
-  paymentStatus: string;
-  dateCreated: string;
-};
-
 const Quotes = () => {
-  const { data: quotes, error } = useSWR<Quote[]>("/api/quotes", fetcher);
+  const { data: quotes, error } = useSWR<WiiQare.Quote[]>(
+    "/api/quotes",
+    fetcher
+  );
   if (error) return <p>Error fetching quotes!</p>;
   return (
     <>

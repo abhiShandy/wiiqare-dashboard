@@ -2,13 +2,7 @@ import { MongoClient, WithId } from "mongodb";
 import Head from "next/head";
 import Dashboard from "../components/dashboard";
 
-type Admin = {
-  id: string;
-  email: string;
-  name?: string;
-};
-
-const Admins = ({ admins }: { admins: Admin[] }) => {
+const Admins = ({ admins }: { admins: WiiQare.Admin[] }) => {
   return (
     <>
       <Head>
@@ -50,9 +44,9 @@ export const getServerSideProps = async () => {
     return { props: { admins: [] } };
   }
 
-  const cursor = client.db("admins").collection<Admin>("web").find();
+  const cursor = client.db("admins").collection<WiiQare.Admin>("web").find();
 
-  const projectCursor = cursor.project<Admin>({ _id: 0 });
+  const projectCursor = cursor.project<WiiQare.Admin>({ _id: 0 });
 
   try {
     const admins = await projectCursor.toArray();

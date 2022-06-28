@@ -2,14 +2,7 @@ import axios from "axios";
 import Head from "next/head";
 import Dashboard from "../components/dashboard";
 
-type Currency = {
-  name: string;
-  code: string;
-  depositFee: string;
-  withdrawalFee: string;
-};
-
-const Currencies = ({ currencies }: { currencies: Currency[] }) => {
+const Currencies = ({ currencies }: { currencies: WiiQare.Currency[] }) => {
   return (
     <>
       <Head>
@@ -70,7 +63,7 @@ const Currencies = ({ currencies }: { currencies: Currency[] }) => {
 };
 
 export async function getStaticProps() {
-  const response = await axios.get<Currency[]>(
+  const response = await axios.get<WiiQare.Currency[]>(
     "https://api.coindirect.com/api/currency/fiat?max=500"
   );
   const currencies = response.data;

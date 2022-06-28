@@ -4,19 +4,11 @@ import useSWR from "swr";
 import Dashboard from "../components/dashboard";
 import { fetcher } from "../utils/fetcher";
 
-type Payment = {
-  uuid: string;
-  type: string;
-  status: string;
-  dateCreated: string;
-  displayCurrency: {
-    amount: number;
-    currency: string;
-  };
-};
-
 const Payments = () => {
-  const { data: payments, error } = useSWR<Payment[]>("/api/payments", fetcher);
+  const { data: payments, error } = useSWR<WiiQare.Payment[]>(
+    "/api/payments",
+    fetcher
+  );
   if (error) return <p>Erro fetching payments!</p>;
   return (
     <>

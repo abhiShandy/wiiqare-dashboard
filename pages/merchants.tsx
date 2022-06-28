@@ -3,18 +3,8 @@ import useSWR from "swr";
 import Dashboard from "../components/dashboard";
 import { fetcher } from "../utils/fetcher";
 
-type Merchant = {
-  merchantId: string;
-  displayName: string;
-  wallet: {
-    currency: {
-      code: string;
-    };
-  };
-};
-
 const Merchants = () => {
-  const { data: merchants, error } = useSWR<Merchant[]>(
+  const { data: merchants, error } = useSWR<WiiQare.Merchant[]>(
     "/api/merchants",
     fetcher
   );
