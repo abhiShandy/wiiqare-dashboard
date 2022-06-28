@@ -13,12 +13,16 @@ export default function Deposit({ expatId }: { expatId: string }) {
   const [mem, setMem] = useState(DepositOptions[0]);
 
   const getChannel = async () => {
-    const channel = (
-      await axios.get<WiiQare.Channel>(
-        `/api/expats/${expatId}/channels?payCurrency=${mem}`
-      )
-    ).data;
-    console.log(channel);
+    try {
+      const channel = (
+        await axios.get<WiiQare.Channel>(
+          `/api/expats/${expatId}/channels?payCurrency=${mem}`
+        )
+      ).data;
+      console.log(channel);
+    } catch (error) {
+      console.log("Error getting channel");
+    }
   };
 
   return (

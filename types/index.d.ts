@@ -39,7 +39,8 @@ export type Expat = {
   email: string;
   name?: string;
   kyc: string;
-  channels: Channel[];
+  displayCurrency: string;
+  channels?: Channel[];
 };
 
 type Merchant = {
