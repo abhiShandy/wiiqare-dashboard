@@ -13,7 +13,7 @@ type Channel = {
   displayCurrency: string;
   payCurrency: string;
   address: string;
-  tag?: number;
+  tag: number | null;
   reference: string;
   status: string;
   uuid: string;

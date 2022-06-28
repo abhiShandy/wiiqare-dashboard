@@ -128,12 +128,15 @@ const Channels = () => {
     fetcher
   );
   if (error) return <p>Error fetching channels!</p>;
+
   return (
     <>
       <Head>
         <title>WiiQare | Channels</title>
       </Head>
       <Dashboard title="Channels">
+        {!channels && <p>Loading...</p>}
+
         {channels && (
           <div className="border border-gray-200 rounded-md">
             <table className="w-full">
