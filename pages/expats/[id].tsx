@@ -1,3 +1,4 @@
+import { CheckIcon, MailIcon, XIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -32,8 +33,20 @@ const Expat = () => {
         <title>WiiQare | Expat</title>
       </Head>
       <Dashboard title={data.name}>
-        <div className="text-lg">Email: {data.email}</div>
-        <div className="text-lg">KYC: {data.kyc}</div>
+        <div className="text-lg flex justify-between">
+          <span>
+            <MailIcon className="h-8 inline" /> {data.email}
+          </span>
+          <span>
+            KYC{" "}
+            {data.kyc === "complete" && (
+              <CheckIcon className="inline h-8 text-green-500" />
+            )}
+            {data.kyc !== "complete" && (
+              <XIcon className="inline h-8 text-red-500" />
+            )}
+          </span>
+        </div>
         {data.kyc !== "complete" && (
           <button
             className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white"
@@ -42,7 +55,7 @@ const Expat = () => {
             Mark KYC as Complete
           </button>
         )}
-        {data.kyc == "complete" && <Deposit />}
+        {data.kyc === "complete" && <Deposit expatId={data.id} />}
       </Dashboard>
     </>
   );

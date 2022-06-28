@@ -1,67 +1,58 @@
-import { Dialog } from "@headlessui/react";
 import { useState } from "react";
-import Modal from "./modal";
+import { RadioGroup } from "@headlessui/react";
+import axios from "axios";
+import Button from "./button";
 
-const Deposit = () => {
-  let [isOpen, setIsOpen] = useState(false);
+const DepositOptions: string[] = ["BTC", "ETH", "ADA"];
 
-  function closeModal() {
-    setIsOpen(false);
-  }
+function classNames(...classes: string[]) {
+  return classes.filter(Boolean).join(" ");
+}
 
-  function openModal() {
-    setIsOpen(true);
-  }
+export default function Deposit({ expatId }: { expatId: string }) {
+  const [mem, setMem] = useState(DepositOptions[0]);
+
+  const getChannel = async () => {
+    const channel = (
+      await axios.get<WiiQare.Channel>(
+        `/api/expats/${expatId}/channels?payCurrency=${mem}`
+      )
+    ).data;
+    console.log(channel);
+  };
+
   return (
-    <Modal
-      buttonText="Deposit"
-      isOpen={isOpen}
-      openModal={openModal}
-      closeModal={closeModal}
-    >
-      <Dialog.Title
-        as="h3"
-        className="text-lg font-medium leading-6 text-gray-900"
-      >
-        Deposit
-      </Dialog.Title>
-      <div className="mt-2">
-        <form>
-          <div className="flex flex-col my-2">
-            <label>Select cryptocurrency</label>
-            <select className="border rounded h-10 px-4 py-2">
-              <option>Bitcoin (BTC)</option>
-              <option>Ethereum (ETH)</option>
-            </select>
-          </div>
+    <div className="mt-6">
+      <h1>Select cryptocurrency to deposit</h1>
+      <RadioGroup value={mem} onChange={setMem} className="mt-2">
+        <RadioGroup.Label className="sr-only">
+          Choose a memory option
+        </RadioGroup.Label>
+        <div className={`grid grid-cols-${DepositOptions.length} gap-2`}>
+          {DepositOptions.map((option) => (
+            <RadioGroup.Option
+              key={option}
+              value={option}
+              className={({ active, checked }) =>
+                classNames(
+                  "cursor-pointer focus:outline-none",
+                  active ? "ring-2 ring-offset-2 ring-indigo-500" : "",
+                  checked
+                    ? "bg-indigo-600 border-transparent text-white hover:bg-indigo-700"
+                    : "bg-white border-gray-200 text-gray-900 hover:bg-gray-50",
+                  "border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1"
+                )
+              }
+            >
+              <RadioGroup.Label as="span">{option}</RadioGroup.Label>
+            </RadioGroup.Option>
+          ))}
+        </div>
+      </RadioGroup>
 
-          <div className="flex flex-col my-2">
-            <label>Select display currency</label>
-            <select className="border rounded h-10 px-4 py-2">
-              <option>Bitcoin (BTC)</option>
-              <option>United States Dollar (USD)</option>
-            </select>
-          </div>
-        </form>
-      </div>
-
-      <div className="mt-4 flex justify-end">
-        <button
-          type="button"
-          className="inline-flex justify-center rounded-md border border-indigo-100 px-4 py-2 text-sm font-medium text-indigo-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
-          onClick={closeModal}
-        >
-          Cancel
-        </button>
-        <button
-          type="button"
-          className="inline-flex justify-center rounded-md border border-transparent bg-indigo-100 px-4 py-2 mx-2 text-sm font-medium text-indigo-900 hover:bg-indigo-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
-        >
-          Next
-        </button>
-      </div>
-    </Modal>
+      <Button className="float-right mt-4" onClick={getChannel}>
+        Proceed
+      </Button>
+    </div>
   );
-};
-
-export default Deposit;
+}
