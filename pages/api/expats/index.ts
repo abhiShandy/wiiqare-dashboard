@@ -1,6 +1,5 @@
 import { MongoClient } from "mongodb";
 import { NextApiHandler } from "next";
-import { Expat } from "../../customers";
 import { v4 as uuid } from "uuid";
 
 const Expats: NextApiHandler = async (request, response) => {
@@ -18,7 +17,7 @@ const Expats: NextApiHandler = async (request, response) => {
     try {
       const data = await client
         .db("customers")
-        .collection<Expat>("expats")
+        .collection<WiiQare.Expat>("expats")
         .insertOne({ id: uuid(), name, email, kyc: "pending" });
       response.status(200).json(data);
     } catch (error) {

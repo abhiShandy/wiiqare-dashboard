@@ -7,18 +7,9 @@ import { useState } from "react";
 import Dashboard from "../components/dashboard";
 import Modal from "../components/modal";
 
-export type Expat = {
-  id: string;
-  email: string;
-  name?: string;
-  kyc: string;
-};
-
-export type Patient = Omit<Expat, "kyc">;
-
 type Props = {
-  expats: Expat[];
-  patients: Patient[];
+  expats: WiiQare.Expat[];
+  patients: WiiQare.Patient[];
 };
 
 const CreateExpatModal = () => {
@@ -285,14 +276,19 @@ export const getServerSideProps = async (): Promise<{ props: Props }> => {
     return { props: { expats: [], patients: [] } };
   }
 
-  const expatCursor = client.db("customers").collection<Expat>("expats").find();
-  const projectExpatCursor = expatCursor.project<Expat>({ _id: 0 });
+  const expatCursor = client
+    .db("customers")
+    .collection<WiiQare.Expat>("expats")
+    .find();
+  const projectExpatCursor = expatCursor.project<WiiQare.Expat>({ _id: 0 });
 
   const patientCursor = client
     .db("customers")
-    .collection<Patient>("patients")
+    .collection<WiiQare.Patient>("patients")
     .find();
-  const projectPatientCursor = patientCursor.project<Patient>({ _id: 0 });
+  const projectPatientCursor = patientCursor.project<WiiQare.Patient>({
+    _id: 0,
+  });
 
   try {
     const expats = await projectExpatCursor.toArray();

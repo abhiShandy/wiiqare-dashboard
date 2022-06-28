@@ -1,6 +1,5 @@
 import { MongoClient } from "mongodb";
 import { NextApiHandler } from "next";
-import { Expat } from "../../customers";
 
 const KYC: NextApiHandler = async (request, response) => {
   if (request.method === "POST") {
@@ -17,7 +16,7 @@ const KYC: NextApiHandler = async (request, response) => {
     try {
       const data = await client
         .db("customers")
-        .collection<Expat>("expats")
+        .collection<WiiQare.Expat>("expats")
         .updateOne({ id }, { $set: { kyc: "complete" } });
       await client.close();
       response.status(200).json(data);

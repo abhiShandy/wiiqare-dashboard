@@ -1,6 +1,5 @@
 import { MongoClient } from "mongodb";
 import { NextApiHandler } from "next";
-import { Expat } from "../../customers";
 
 const GetExpat: NextApiHandler = async (request, response) => {
   if (request.method !== "GET") response.status(300);
@@ -16,7 +15,7 @@ const GetExpat: NextApiHandler = async (request, response) => {
   try {
     const cursor = await client
       .db("customers")
-      .collection<Expat>("expats")
+      .collection<WiiQare.Expat>("expats")
       .findOne({ id });
     if (cursor) response.status(200).json(cursor);
     else response.status(404);

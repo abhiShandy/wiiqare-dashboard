@@ -1,6 +1,5 @@
 import { MongoClient } from "mongodb";
 import { NextApiHandler } from "next";
-import { Patient } from "../../customers";
 import { v4 as uuid } from "uuid";
 
 const Patients: NextApiHandler = async (request, response) => {
@@ -18,7 +17,7 @@ const Patients: NextApiHandler = async (request, response) => {
     try {
       const data = await client
         .db("customers")
-        .collection<Patient>("patients")
+        .collection<WiiQare.Patient>("patients")
         .insertOne({ id: uuid(), name, email });
       response.status(200).json(data);
     } catch (error) {
@@ -39,9 +38,11 @@ const Patients: NextApiHandler = async (request, response) => {
 
     const patientCursor = client
       .db("customers")
-      .collection<Patient>("patients")
+      .collection<WiiQare.Patient>("patients")
       .find();
-    const projectPatientCursor = patientCursor.project<Patient>({ _id: 0 });
+    const projectPatientCursor = patientCursor.project<WiiQare.Patient>({
+      _id: 0,
+    });
 
     try {
       const patients = await projectPatientCursor.toArray();
