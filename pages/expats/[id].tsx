@@ -1,13 +1,9 @@
-import { Dialog } from "@headlessui/react";
 import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import useSWR from "swr";
 import Dashboard from "../../components/dashboard";
-import Modal from "../../components/modal";
 import { fetcher } from "../../utils/fetcher";
-import { Patient } from "../customers";
 
 const Expat = () => {
   const router = useRouter();
