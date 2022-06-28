@@ -4,6 +4,29 @@ type Admin = {
   name?: string;
 };
 
+type Channel = {
+  id: string;
+  dateCreated: number;
+  lastUpdated: number;
+  merchantId: string;
+  walletCurrency: string;
+  displayCurrency: string;
+  payCurrency: string;
+  address: string;
+  tag?: number;
+  reference: string;
+  status: string;
+  uuid: string;
+  redirectUrl?: string;
+  uri: string;
+  alternatives?: {
+    protocol: string;
+    address: string;
+    tag: string;
+    uri: string;
+  }[];
+};
+
 type Currency = {
   name: string;
   code: string;
@@ -16,6 +39,7 @@ export type Expat = {
   email: string;
   name?: string;
   kyc: string;
+  channels: Channel[];
 };
 
 type Merchant = {
@@ -28,7 +52,7 @@ type Merchant = {
   };
 };
 
-type Patient = Omit<Expat, "kyc">;
+type Patient = { id: string; email: string; name?: string };
 
 type Payment = {
   uuid: string;

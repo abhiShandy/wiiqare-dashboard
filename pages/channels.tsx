@@ -7,15 +7,6 @@ import axios from "axios";
 import { fetcher } from "../utils/fetcher";
 import Modal from "../components/modal";
 
-type Channel = {
-  id: string;
-  address: string;
-  reference: string;
-  displayCurrency: string;
-  payCurrency: string;
-  dateCreated: string;
-};
-
 function CreateChannelModal() {
   let [isOpen, setIsOpen] = useState(false);
   const [payCurrency, setPayCurrency] = useState("BTC");
@@ -132,7 +123,10 @@ function CreateChannelModal() {
 }
 
 const Channels = () => {
-  const { data: channels, error } = useSWR<Channel[]>("/api/channels", fetcher);
+  const { data: channels, error } = useSWR<WiiQare.Channel[]>(
+    "/api/channels",
+    fetcher
+  );
   if (error) return <p>Error fetching channels!</p>;
   return (
     <>
