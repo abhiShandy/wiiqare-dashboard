@@ -27,7 +27,7 @@ const CreateExpatModal = () => {
 
   async function createExpat() {
     try {
-      await axios.post("/api/expats", { name, email });
+      await axios.post("/api/expats", { name, email, displayCurrency: "USD" });
       closeModal();
     } catch (error) {
       console.log("Could not create expat");
