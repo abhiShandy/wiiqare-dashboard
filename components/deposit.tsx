@@ -3,7 +3,17 @@ import { RadioGroup } from "@headlessui/react";
 import axios from "axios";
 import Button from "./button";
 
-const DepositOptions: string[] = ["BTC", "ETH", "ADA"];
+const DepositOptions: string[] = [
+  "BTC",
+  "ETH",
+  "XRP",
+  "LTC",
+  "BCH",
+  "DAI",
+  "DOGE",
+  "ADA",
+  "SOL",
+];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -28,13 +38,13 @@ export default function Deposit({ expatId }: { expatId: string }) {
   };
 
   return (
-    <div className="mt-6">
+    <div className="mt-6 px-4 sm:px-6 lg:px-8">
       <h1>Select cryptocurrency to deposit</h1>
       <RadioGroup value={mem} onChange={setMem} className="mt-2">
         <RadioGroup.Label className="sr-only">
           Choose a memory option
         </RadioGroup.Label>
-        <div className={`grid grid-cols-${DepositOptions.length} gap-2`}>
+        <div className={`grid grid-cols-3 gap-2`}>
           {DepositOptions.map((option) => (
             <RadioGroup.Option
               key={option}
@@ -56,7 +66,7 @@ export default function Deposit({ expatId }: { expatId: string }) {
         </div>
       </RadioGroup>
 
-      <Button className="float-right mt-4" onClick={getChannel}>
+      <Button className="mt-4" onClick={getChannel}>
         Proceed
       </Button>
     </div>

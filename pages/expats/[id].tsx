@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import Dashboard from "../../components/dashboard";
 import Deposit from "../../components/deposit";
+import Transactions from "../../components/transactions";
 import { fetcher } from "../../utils/fetcher";
 
 const Expat = () => {
@@ -33,7 +34,7 @@ const Expat = () => {
         <title>WiiQare | Expat</title>
       </Head>
       <Dashboard title={data.name}>
-        <div className="text-lg flex justify-between">
+        <div className="text-lg flex justify-between px-4 sm:px-6 lg:px-8">
           <span>
             <MailIcon className="h-8 inline" /> {data.email}
           </span>
@@ -55,7 +56,12 @@ const Expat = () => {
             Mark KYC as Complete
           </button>
         )}
-        {data.kyc === "complete" && <Deposit expatId={data.id} />}
+        {data.kyc === "complete" && (
+          <>
+            <Deposit expatId={data.id} />
+            <Transactions expatId={data.id} />
+          </>
+        )}
       </Dashboard>
     </>
   );
