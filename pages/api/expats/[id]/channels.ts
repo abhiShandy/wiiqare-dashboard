@@ -1,10 +1,14 @@
 import { MongoClient } from "mongodb";
 import { NextApiHandler } from "next";
+import { CreateChannel } from "../../_common";
 
 const GetChannel: NextApiHandler = async (request, response) => {
-  if (request.method !== "GET") response.status(300);
+  if (request.method !== "GET") response.status(300).json({});
 
-  const { id, payCurrency } = request.query;
+  const { id, payCurrency } = request.query as {
+    id: string;
+    payCurrency: string;
+  };
 
   const client = new MongoClient(process.env.MONGODB_URL || "");
 
@@ -12,7 +16,7 @@ const GetChannel: NextApiHandler = async (request, response) => {
     await client.connect();
   } catch (error) {
     console.log("Error connecting to MongoDB");
-    response.status(500);
+    response.status(500).json({});
   }
 
   try {
@@ -20,16 +24,55 @@ const GetChannel: NextApiHandler = async (request, response) => {
       .db("customers")
       .collection<WiiQare.Expat>("expats")
       .findOne({ id });
-    if (cursor && cursor.channels && cursor.channels.length > 0) {
+
+    console.log(cursor);
+
+    if (!cursor) {
+      response.status(400).json({});
+      await client.close();
+      return;
+    }
+
+    if (cursor.channels && cursor.channels.length > 0) {
       const channel = cursor.channels.find(
         (c) => c.payCurrency === payCurrency
       );
-      response.status(200).json(channel);
+
+      console.log(channel);
+
+      if (channel) response.status(200).json(channel);
+      else {
+        const channel = await CreateChannel(
+          cursor.displayCurrency,
+          payCurrency,
+          `${id}-${payCurrency}-${cursor.displayCurrency}`
+        );
+
+        if (channel) {
+          await client
+            .db("customers")
+            .collection<WiiQare.Expat>("expats")
+            .updateOne({ id }, { $addToSet: { channels: channel } });
+          response.status(200).json(channel);
+        } else response.status(500).json({});
+      }
+    } else {
+      const channel = await CreateChannel(
+        cursor.displayCurrency,
+        payCurrency,
+        `${id}-${payCurrency}-${cursor.displayCurrency}`
+      );
+
+      if (channel) {
+        await client
+          .db("customers")
+          .collection<WiiQare.Expat>("expats")
+          .updateOne({ id }, { $addToSet: { channels: channel } });
+        response.status(200).json(channel);
+      } else response.status(500).json({});
     }
-    response.status(400).json({});
   } catch (error) {
-    console.log("Error finding Expat!");
-    response.status(500);
+    response.status(500).json({});
   }
 
   await client.close();

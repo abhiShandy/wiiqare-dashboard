@@ -143,8 +143,8 @@ const Channels = () => {
               <thead>
                 <tr className="text-left h-8">
                   <th className="pl-4">Reference</th>
-                  <th>Date Created</th>
-                  <th>Address</th>
+                  {/* <th>Date Created</th> */}
+                  {/* <th>Address</th> */}
                   <th className="text-right">Display Currency</th>
                   <th className="text-right pr-4">Pay Currency</th>
                 </tr>
@@ -156,10 +156,10 @@ const Channels = () => {
                     className="hover:bg-gray-200 h-8 text-left"
                   >
                     <td className="pl-4">{channel.reference}</td>
-                    <td>
-                      {new Date(channel.dateCreated).toISOString().slice(0, -8)}
-                    </td>
-                    <td>{channel.address}</td>
+                    {/* <td> */}
+                    {/* {new Date(channel.dateCreated).toISOString().slice(0, -8)} */}
+                    {/* </td> */}
+                    {/* <td>{channel.address}</td> */}
                     <td className="text-right">{channel.displayCurrency}</td>
                     <td className="text-right pr-4">{channel.payCurrency}</td>
                   </tr>

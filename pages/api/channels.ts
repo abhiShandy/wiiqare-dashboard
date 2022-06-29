@@ -1,7 +1,7 @@
 import axios from "axios";
 import hawk from "hawk";
 import { NextApiHandler } from "next";
-import { credentials, MERCHANT_ID } from "./_common";
+import { CreateChannel, credentials, MERCHANT_ID } from "./_common";
 
 const Channels: NextApiHandler = async (request, response) => {
   if (request.method === "GET") {
@@ -18,16 +18,12 @@ const Channels: NextApiHandler = async (request, response) => {
   } else if (request.method === "POST") {
     try {
       const { displayCurrency, payCurrency, reference } = request.body;
-      const url = `https://api.sandbox.coindirect.com/api/v2/channel`;
-      const { header } = hawk.client.header(url, "POST", { credentials });
-      await axios.post(
-        url,
-        { merchantId: MERCHANT_ID, displayCurrency, payCurrency, reference },
-        {
-          headers: { Authorization: header },
-        }
+      const channel = await CreateChannel(
+        displayCurrency,
+        payCurrency,
+        reference
       );
-      response.status(200).json({});
+      response.status(200).json(channel);
     } catch (error) {
       console.log(error);
       response.status(500).json({});

@@ -17,7 +17,7 @@ type Channel = {
   reference: string;
   status: string;
   uuid: string;
-  redirectUrl?: string;
+  redirectUrl: string;
   uri: string;
   alternatives?: {
     protocol: string;

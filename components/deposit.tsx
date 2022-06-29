@@ -20,6 +20,8 @@ export default function Deposit({ expatId }: { expatId: string }) {
         )
       ).data;
       console.log(channel);
+
+      window.open(channel.redirectUrl);
     } catch (error) {
       console.log("Error getting channel");
     }
