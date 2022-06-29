@@ -141,6 +141,8 @@ const Wallets = () => {
         <title>WiiQare | Wallets</title>
       </Head>
       <Dashboard title="Wallets">
+        {!wallets && <p>Loading...</p>}
+
         {wallets && (
           <div className="rounded-lg border">
             <table className="w-full">

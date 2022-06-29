@@ -15,6 +15,8 @@ const Merchants = () => {
         <title>WiiQare | Merchants</title>
       </Head>
       <Dashboard title="Merchants">
+        {!merchants && <p>Loading...</p>}
+
         {merchants && (
           <div className="rounded-lg border">
             <table className="w-full">

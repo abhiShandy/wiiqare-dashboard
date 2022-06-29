@@ -9,13 +9,15 @@ const Payments = () => {
     "/api/payments",
     fetcher
   );
-  if (error) return <p>Erro fetching payments!</p>;
+  if (error) return <p>Error fetching payments!</p>;
   return (
     <>
       <Head>
         <title>WiiQare | Payments</title>
       </Head>
       <Dashboard title="Payments">
+        {!payments && <p>Loading...</p>}
+
         {payments && (
           <div className="border rounded-lg">
             <table className="w-full">

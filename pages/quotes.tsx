@@ -15,6 +15,8 @@ const Quotes = () => {
         <title>WiiQare | Quotes</title>
       </Head>
       <Dashboard title="Quotes">
+        {!quotes && <p>Loading...</p>}
+
         {quotes && (
           <div className="border rounded-lg">
             <table className="w-full">
