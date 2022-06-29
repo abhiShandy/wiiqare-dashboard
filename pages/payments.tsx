@@ -43,7 +43,7 @@ const Payments = () => {
                         {payment.type === "IN" ? (
                           <ArrowDownIcon className="h-6 text-green-500" />
                         ) : (
-                          <ArrowUpIcon />
+                          <ArrowUpIcon className="h-6 text-red-500" />
                         )}
                       </td>
                       <td>
