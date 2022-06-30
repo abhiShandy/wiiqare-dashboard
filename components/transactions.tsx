@@ -14,19 +14,12 @@ export type Transaction = {
 };
 
 export default function Transactions({ expatId }: { expatId: string }) {
-  const [payments, setPayments] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [transactions, setTransactions] = useState();
 
   const getTransactions = async () => {
     try {
-      // setIsLoading(true);
-      const channelRefs = [expatId, `${expatId}-ETH-USD`]; // TODO: avoid this hack
-      const response = await axios.get(`/api/expats/${expatId}/payments`);
-      const filteredResponse = response.data.filter(
-        (p: any) => channelRefs.includes(p.reference) && p.status === "COMPLETE"
-      );
-      setPayments(filteredResponse);
-      // setIsLoading(false);
+      const response = await axios.get(`/api/expats/${expatId}/transactions`);
+      setTransactions(response.data);
     } catch (error) {
       console.log("Error getting transactions");
     }
@@ -36,5 +29,5 @@ export default function Transactions({ expatId }: { expatId: string }) {
     getTransactions();
   });
 
-  return <TransactionTable transactions={payments} />;
+  return <TransactionTable transactions={transactions} />;
 }

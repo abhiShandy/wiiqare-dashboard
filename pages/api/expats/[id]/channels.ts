@@ -25,8 +25,6 @@ const GetChannel: NextApiHandler = async (request, response) => {
       .collection<WiiQare.Expat>("expats")
       .findOne({ id });
 
-    console.log(cursor);
-
     if (!cursor) {
       response.status(400).json({});
       await client.close();
@@ -37,8 +35,6 @@ const GetChannel: NextApiHandler = async (request, response) => {
       const channel = cursor.channels.find(
         (c) => c.payCurrency === payCurrency
       );
-
-      console.log(channel);
 
       if (channel) response.status(200).json(channel);
       else {
