@@ -10,6 +10,7 @@ const GetExpat: NextApiHandler = async (request, response) => {
     await client.connect();
   } catch (error) {
     console.log("Error connecting to MongoDB");
+    response.status(500).json({});
   }
 
   try {
@@ -21,7 +22,7 @@ const GetExpat: NextApiHandler = async (request, response) => {
     else response.status(404);
   } catch (error) {
     console.log("Error finding Expat!");
-    response.status(500);
+    response.status(500).json({});
   }
   await client.close();
 };
