@@ -1,6 +1,6 @@
 import Head from "next/head";
 import useSWR from "swr";
-import ChannelPaymentTable from "../components/channelPaymentTable";
+import ChannelPaymentTable from "../components/tables/channelPayments";
 import Dashboard from "../components/dashboard";
 import { fetcher } from "../utils/fetcher";
 

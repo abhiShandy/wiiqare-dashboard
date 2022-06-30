@@ -1,7 +1,7 @@
 import { RefreshIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import TransactionTable from "./transactionTable";
+import TransactionTable from "./tables/transactions";
 
 export default function Transactions({ expatId }: { expatId: string }) {
   const [transactions, setTransactions] = useState<WiiQare.Transaction[]>();
