@@ -74,8 +74,14 @@ const Transactions: NextApiHandler = async (request, response) => {
           dateCreated: fcp.dateCreated,
           lastUpdated: fcp.lastUpdated,
           status: fcp.status,
+          balance: 0,
         })
       );
+
+      transactions.forEach((t, i) => {
+        if (i == 0) t.balance = t.displayAmount;
+        else t.balance = transactions[i - 1].balance + t.displayAmount;
+      });
 
       await client.close();
       response.status(200).json(transactions);

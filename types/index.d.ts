@@ -83,6 +83,7 @@ export type Transaction = {
   dateCreated: number;
   lastUpdated: number;
   status: "DETECTED" | "COMPLETE";
+  balance: number;
 };
 
 type Wallet = {
