@@ -1,11 +1,11 @@
 import Head from "next/head";
 import useSWR from "swr";
-import ChannelPaymentTable from "../components/tables/channelPayments";
+import ChannelPaymentTable from "../components/tables/channel-payments";
 import Dashboard from "../components/dashboard";
 import { fetcher } from "../utils/fetcher";
 
 export default function ChannelPayments() {
-  const { data, error } = useSWR("/api/channelPayments", fetcher);
+  const { data, error } = useSWR("/api/channel-payments", fetcher);
 
   if (error) return <p>Error loading channel payments.</p>;
 

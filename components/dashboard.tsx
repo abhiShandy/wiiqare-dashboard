@@ -23,7 +23,7 @@ const navigation: Navigation[] = [
   // { name: "Channels", href: "/channels", icon: CashIcon, current: false },
   {
     name: "Payments",
-    href: "/channelPayments",
+    href: "/channel-payments",
     icon: CashIcon,
     current: false,
   },
