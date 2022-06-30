@@ -64,8 +64,10 @@ const Transactions: NextApiHandler = async (request, response) => {
 
       // Transform the filtered channel payments to "Transaction" type
 
-      const transactions = filteredChannelPayments.map<WiiQare.Transaction>(
-        (fcp) => ({
+      const transactions = filteredChannelPayments
+        .sort((a, b) => a.lastUpdated - b.lastUpdated)
+        .filter((t) => t.paidAmount > 0)
+        .map<WiiQare.Transaction>((fcp) => ({
           paidAmount: fcp.paidAmount,
           paidCurrency: fcp.paidCurrency,
           displayAmount: fcp.displayAmount,
@@ -75,8 +77,7 @@ const Transactions: NextApiHandler = async (request, response) => {
           lastUpdated: fcp.lastUpdated,
           status: fcp.status,
           balance: 0,
-        })
-      );
+        }));
 
       transactions.forEach((t, i) => {
         if (i == 0) t.balance = t.displayAmount;
