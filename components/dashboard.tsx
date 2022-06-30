@@ -20,18 +20,23 @@ type Navigation = {
 };
 
 const navigation: Navigation[] = [
-  { name: "Channels", href: "/channels", icon: CashIcon, current: false },
-  { name: "Payments", href: "/payments", icon: CashIcon, current: false },
-  { name: "Wallets", href: "/wallets", icon: CashIcon, current: false },
-  { name: "Currencies", href: "/currencies", icon: CashIcon, current: false },
-  { name: "Quotes", href: "/quotes", icon: ChatIcon, current: false },
+  // { name: "Channels", href: "/channels", icon: CashIcon, current: false },
   {
-    name: "Merchants",
-    href: "/merchants",
-    icon: ShoppingBagIcon,
+    name: "Payments",
+    href: "/channelPayments",
+    icon: CashIcon,
     current: false,
   },
-  { name: "Admins", href: "/admins", icon: UserGroupIcon, current: false },
+  { name: "Wallets", href: "/wallets", icon: CashIcon, current: false },
+  // { name: "Currencies", href: "/currencies", icon: CashIcon, current: false },
+  // { name: "Quotes", href: "/quotes", icon: ChatIcon, current: false },
+  // {
+  //   name: "Merchants",
+  //   href: "/merchants",
+  //   icon: ShoppingBagIcon,
+  //   current: false,
+  // },
+  // { name: "Admins", href: "/admins", icon: UserGroupIcon, current: false },
   {
     name: "Customers",
     href: "/customers",
