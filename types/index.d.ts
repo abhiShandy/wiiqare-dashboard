@@ -74,6 +74,17 @@ type Quote = {
   dateCreated: string;
 };
 
+export type Transaction = {
+  hash: string;
+  paidAmount: number;
+  paidCurrency: string;
+  displayAmount: number;
+  displayCurrency: string;
+  dateCreated: number;
+  lastUpdated: number;
+  status: "DETECTED" | "COMPLETE";
+};
+
 type Wallet = {
   id: string;
   balance: string;

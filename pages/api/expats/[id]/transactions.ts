@@ -2,7 +2,6 @@ import axios from "axios";
 import hawk from "hawk";
 import { MongoClient } from "mongodb";
 import { NextApiHandler } from "next";
-import { Transaction } from "../../../../components/transactions";
 import { credentials, MERCHANT_ID } from "../../_common";
 
 const Transactions: NextApiHandler = async (request, response) => {
@@ -65,17 +64,20 @@ const Transactions: NextApiHandler = async (request, response) => {
 
       // Transform the filtered channel payments to "Transaction" type
 
-      const transactions = filteredChannelPayments.map<Transaction>((fcp) => ({
-        paidAmount: fcp.paidAmount,
-        paidCurrency: fcp.paidCurrency,
-        displayAmount: fcp.displayAmount,
-        displayCurrency: fcp.displayCurrency,
-        hash: fcp.hash,
-        dateCreated: fcp.dateCreated,
-        lastUpdated: fcp.lastUpdated,
-        status: fcp.status,
-      }));
+      const transactions = filteredChannelPayments.map<WiiQare.Transaction>(
+        (fcp) => ({
+          paidAmount: fcp.paidAmount,
+          paidCurrency: fcp.paidCurrency,
+          displayAmount: fcp.displayAmount,
+          displayCurrency: fcp.displayCurrency,
+          hash: fcp.hash,
+          dateCreated: fcp.dateCreated,
+          lastUpdated: fcp.lastUpdated,
+          status: fcp.status,
+        })
+      );
 
+      await client.close();
       response.status(200).json(transactions);
     } catch (error) {
       response.status(500).json({});
