@@ -38,7 +38,7 @@ export type Expat = {
   id: string;
   email: string;
   phone: string;
-  name?: string;
+  name: string;
   kyc: string;
   displayCurrency: string;
   channels?: Channel[];
@@ -58,7 +58,7 @@ type Patient = {
   id: string;
   email: string;
   phone: string;
-  name?: string;
+  name: string;
 };
 
 type Payment = {

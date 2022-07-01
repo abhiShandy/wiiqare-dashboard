@@ -226,7 +226,7 @@ const Customers = ({ expats, patients }: Props) => {
                   </td>
                   <td>{expat.email}</td>
                   <td>{expat.phone}</td>
-                  <td>{expat.name ? expat.name : "N/A"}</td>
+                  <td>{expat.name}</td>
                   <td className="text-right pr-4">{expat.kyc}</td>
                 </tr>
               ))}
@@ -259,7 +259,7 @@ const Customers = ({ expats, patients }: Props) => {
                   </td>
                   <td>{patient.email}</td>
                   <td>{patient.phone}</td>
-                  <td>{patient.name ? patient.name : "N/A"}</td>
+                  <td>{patient.name}</td>
                 </tr>
               ))}
             </tbody>
