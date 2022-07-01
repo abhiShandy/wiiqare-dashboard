@@ -213,6 +213,7 @@ const Customers = ({ expats, patients }: Props) => {
               <tr className="text-left h-8">
                 <th className="pl-4">ID</th>
                 <th>Email</th>
+                <th>Phone</th>
                 <th>Name</th>
                 <th className="text-right pr-4">KYC</th>
               </tr>
@@ -224,6 +225,7 @@ const Customers = ({ expats, patients }: Props) => {
                     <Link href={`/expats/${expat.id}`}>{expat.id}</Link>
                   </td>
                   <td>{expat.email}</td>
+                  <td>{expat.phone}</td>
                   <td>{expat.name ? expat.name : "N/A"}</td>
                   <td className="text-right pr-4">{expat.kyc}</td>
                 </tr>
@@ -242,6 +244,7 @@ const Customers = ({ expats, patients }: Props) => {
               <tr className="text-left h-8">
                 <th className="pl-4">ID</th>
                 <th>Email</th>
+                <th>Phone</th>
                 <th>Name</th>
               </tr>
             </thead>
@@ -255,6 +258,7 @@ const Customers = ({ expats, patients }: Props) => {
                     <Link href={`/patients/${patient.id}`}>{patient.id}</Link>
                   </td>
                   <td>{patient.email}</td>
+                  <td>{patient.phone}</td>
                   <td>{patient.name ? patient.name : "N/A"}</td>
                 </tr>
               ))}

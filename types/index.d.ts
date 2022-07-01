@@ -37,6 +37,7 @@ type Currency = {
 export type Expat = {
   id: string;
   email: string;
+  phone: string;
   name?: string;
   kyc: string;
   displayCurrency: string;
@@ -53,7 +54,12 @@ type Merchant = {
   };
 };
 
-type Patient = { id: string; email: string; name?: string };
+type Patient = {
+  id: string;
+  email: string;
+  phone: string;
+  name?: string;
+};
 
 type Payment = {
   uuid: string;
