@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import Dashboard from "../../components/dashboard";
 import Deposit from "../../components/deposit";
+import CreateTransferForm from "../../components/forms/create-transfer";
 import Transactions from "../../components/transactions";
 import { fetcher } from "../../utils/fetcher";
 
@@ -59,6 +60,7 @@ const Expat = () => {
           {data.kyc === "complete" && (
             <>
               <Deposit expatId={data.id} />
+              <CreateTransferForm expatID={data.id} />
               <Transactions expatId={data.id} />
             </>
           )}
