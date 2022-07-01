@@ -28,6 +28,7 @@ const navigation: Navigation[] = [
     current: false,
   },
   { name: "Wallets", href: "/wallets", icon: CashIcon, current: false },
+  { name: "Transfers", href: "/transfers", icon: CashIcon, current: false },
   // { name: "Currencies", href: "/currencies", icon: CashIcon, current: false },
   // { name: "Quotes", href: "/quotes", icon: ChatIcon, current: false },
   // {

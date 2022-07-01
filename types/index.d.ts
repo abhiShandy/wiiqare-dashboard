@@ -92,6 +92,17 @@ export type Transaction = {
   balance: number;
 };
 
+type Transfer = {
+  id: string;
+  expatID: string;
+  patientID: string;
+  amount: number;
+  currency: string;
+  dateCreated: number;
+  lastUpdated: number;
+  status: "SUBMITTED" | "PROCESSING" | "COMPLETED";
+};
+
 type Wallet = {
   id: string;
   balance: string;
