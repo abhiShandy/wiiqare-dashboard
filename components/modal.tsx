@@ -16,7 +16,7 @@ const Modal = ({
 }) => {
   return (
     <>
-      <div className="float-right mt-2">
+      <div className="mt-2 px-4 sm:px-6 lg:px-8">
         <button
           type="button"
           onClick={openModal}
