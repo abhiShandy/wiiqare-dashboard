@@ -5,6 +5,7 @@ import {
   ChatIcon,
   MenuIcon,
   ShoppingBagIcon,
+  SwitchHorizontalIcon,
   UserGroupIcon,
   XIcon,
 } from "@heroicons/react/outline";
@@ -28,7 +29,12 @@ const navigation: Navigation[] = [
     current: false,
   },
   { name: "Wallets", href: "/wallets", icon: CashIcon, current: false },
-  { name: "Transfers", href: "/transfers", icon: CashIcon, current: false },
+  {
+    name: "Transfers",
+    href: "/transfers",
+    icon: SwitchHorizontalIcon,
+    current: false,
+  },
   // { name: "Currencies", href: "/currencies", icon: CashIcon, current: false },
   // { name: "Quotes", href: "/quotes", icon: ChatIcon, current: false },
   // {
