@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 
 const Expats: NextApiHandler = async (request, response) => {
   if (request.method === "POST") {
-    const { name, email, displayCurrency } = request.body;
+    const { name, email, phone, displayCurrency } = request.body;
 
     const client = new MongoClient(process.env.MONGODB_URL || "");
 
@@ -22,6 +22,7 @@ const Expats: NextApiHandler = async (request, response) => {
           id: uuid(),
           name,
           email,
+          phone,
           kyc: "pending",
           displayCurrency,
         });
