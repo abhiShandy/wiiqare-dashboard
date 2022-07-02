@@ -48,7 +48,17 @@ export default function DepositTable({ data }: any) {
                             {e.displayAmount} {e.displayCurrency}
                           </div>
                         </td>
-                        <td>{e.status}</td>
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm">
+                          <span
+                            className={
+                              e.status === "COMPLETE"
+                                ? "text-green-500"
+                                : "text-gray-900"
+                            }
+                          >
+                            {e.status}
+                          </span>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
