@@ -15,8 +15,10 @@ export default function Transfers() {
         <title>WiiQare | Transfers</title>
       </Head>
       <Dashboard title="Transfers">
-        {!data && <p>Loading...</p>}
-        {data && <TransferTable data={data} />}
+        <div className="px-4 sm:px-6 lg:px-8">
+          {!data && <p>Loading...</p>}
+          {data && <TransferTable data={data} />}
+        </div>
       </Dashboard>
     </>
   );
