@@ -1,37 +1,12 @@
 import { Dialog } from "@headlessui/react";
 import axios from "axios";
 import Head from "next/head";
-import Image from "next/image";
 import React, { useState } from "react";
 import useSWR from "swr";
 import Dashboard from "../components/dashboard";
 import Modal from "../components/modal";
+import WalletTable from "../components/tables/wallets";
 import { fetcher } from "../utils/fetcher";
-
-const CurrencyRow = ({ wallet }: { wallet: WiiQare.Wallet }) => {
-  return (
-    <tr className="hover:bg-gray-200 h-16">
-      <td className="text-center p-2">
-        {wallet.currency.icon && (
-          <Image
-            src={wallet.currency.icon}
-            alt={wallet.currency.code}
-            width={32}
-            height={32}
-          />
-        )}
-      </td>
-      <td>
-        <p>{wallet.description}</p>
-        <p className="text-gray-500">{wallet.currency.code}</p>
-      </td>
-      <td className="text-right">
-        {wallet.balance} {wallet.currency.code}
-      </td>
-      <td></td>
-    </tr>
-  );
-};
 
 function AddWalletModal() {
   let [isOpen, setIsOpen] = useState(false);
@@ -141,42 +116,10 @@ const Wallets = () => {
         <title>WiiQare | Wallets</title>
       </Head>
       <Dashboard title="Wallets">
-        {!wallets && <p>Loading...</p>}
-
-        {wallets && (
-          <div className="rounded-lg border">
-            <table className="w-full">
-              <tbody>
-                <tr>
-                  <td
-                    className="pl-4 py-4 bg-gray-200 font-semibold"
-                    colSpan={4}
-                  >
-                    Fiat
-                  </td>
-                </tr>
-                {wallets
-                  .filter((wallet) => wallet.currency.fiat)
-                  .map((wallet) => (
-                    <CurrencyRow key={wallet.id} wallet={wallet} />
-                  ))}
-                <tr>
-                  <td
-                    className="pl-4 py-4 bg-gray-200 font-semibold"
-                    colSpan={4}
-                  >
-                    Cryptocurrency
-                  </td>
-                </tr>
-                {wallets
-                  .filter((wallet) => !wallet.currency.fiat)
-                  .map((wallet) => (
-                    <CurrencyRow key={wallet.id} wallet={wallet} />
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <div className="px-4 sm:px-6 lg:px-8">
+          {!wallets && <p>Loading...</p>}
+          {wallets && <WalletTable wallets={wallets} />}
+        </div>
         <AddWalletModal />
       </Dashboard>
     </>
