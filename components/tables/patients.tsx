@@ -27,25 +27,27 @@ export default function PatientTable({
                   </th>
                   <th
                     scope="col"
-                    className="px-3 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                    className="px-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900"
                   >
                     Email
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {patients.map((expat) => (
-                  <tr key={expat.id}>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:pl-6">
-                      <Link href={`/patients/${expat.id}`}>{expat.name}</Link>
-                    </td>
-                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900">
-                      {expat.phone}
-                    </td>
-                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900">
-                      {expat.email}
-                    </td>
-                  </tr>
+                {patients.map((patient) => (
+                  <Link href={`/patients/${patient.id}`} key={patient.id}>
+                    <tr className="hover:bg-indigo-200 hover:cursor-pointer">
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-900 sm:pl-6">
+                        {patient.name}
+                      </td>
+                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900">
+                        {patient.phone}
+                      </td>
+                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900">
+                        {patient.email}
+                      </td>
+                    </tr>
+                  </Link>
                 ))}
               </tbody>
             </table>
