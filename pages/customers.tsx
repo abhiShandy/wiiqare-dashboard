@@ -1,18 +1,13 @@
 import { Dialog } from "@headlessui/react";
 import axios from "axios";
-import { MongoClient, WithId } from "mongodb";
 import Head from "next/head";
-import Link from "next/link";
 import { useState } from "react";
+import useSWR from "swr";
 import Dashboard from "../components/dashboard";
 import Modal from "../components/modal";
 import ExpatTable from "../components/tables/expats";
 import PatientTable from "../components/tables/patients";
-
-type Props = {
-  expats: WiiQare.Expat[];
-  patients: WiiQare.Patient[];
-};
+import { fetcher } from "../utils/fetcher";
 
 const CreateExpatModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -198,7 +193,14 @@ const CreatePatientModal = () => {
   );
 };
 
-const Customers = ({ expats, patients }: Props) => {
+const Customers = () => {
+  const { data, error } = useSWR<{
+    expats: WiiQare.Expat[];
+    patients: WiiQare.Patient[];
+  }>("/api/customers", fetcher);
+
+  if (error) return <p>Error getting list of customers.</p>;
+
   return (
     <>
       <Head>
@@ -206,56 +208,26 @@ const Customers = ({ expats, patients }: Props) => {
       </Head>
       <Dashboard title="Customers">
         <div className="px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-row justify-between my-4">
-            <h2 className="text-xl font-bold">Expats</h2>
-            <CreateExpatModal />
-          </div>
-          <ExpatTable expats={expats} />
-          <div className="flex flex-row justify-between my-4">
-            <h2 className="text-xl font-bold">Patients</h2>
-            <CreatePatientModal />
-          </div>
-          <PatientTable patients={patients} />
+          {!data && <p>Loading...</p>}
+
+          {data && (
+            <>
+              <div className="flex flex-row justify-between my-4">
+                <h2 className="text-xl font-bold">Expats</h2>
+                <CreateExpatModal />
+              </div>
+              <ExpatTable expats={data.expats} />
+              <div className="flex flex-row justify-between my-4">
+                <h2 className="text-xl font-bold">Patients</h2>
+                <CreatePatientModal />
+              </div>
+              <PatientTable patients={data.patients} />
+            </>
+          )}
         </div>
       </Dashboard>
     </>
   );
-};
-
-export const getServerSideProps = async (): Promise<{ props: Props }> => {
-  const client = new MongoClient(process.env.MONGODB_URL || "");
-
-  try {
-    await client.connect();
-  } catch (error) {
-    console.log("Error connecting to MongoDB");
-    return { props: { expats: [], patients: [] } };
-  }
-
-  const expatCursor = client
-    .db("customers")
-    .collection<WiiQare.Expat>("expats")
-    .find();
-  const projectExpatCursor = expatCursor.project<WiiQare.Expat>({ _id: 0 });
-
-  const patientCursor = client
-    .db("customers")
-    .collection<WiiQare.Patient>("patients")
-    .find();
-  const projectPatientCursor = patientCursor.project<WiiQare.Patient>({
-    _id: 0,
-  });
-
-  try {
-    const expats = await projectExpatCursor.toArray();
-    const patients = await projectPatientCursor.toArray();
-
-    return { props: { expats, patients } };
-  } catch (error) {
-    console.log("Error converting patients and/or expats to array");
-    return { props: { expats: [], patients: [] } };
-  }
-  await client.close();
 };
 
 export default Customers;

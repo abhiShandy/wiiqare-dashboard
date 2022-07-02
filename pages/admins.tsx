@@ -1,8 +1,18 @@
-import { MongoClient, WithId } from "mongodb";
 import Head from "next/head";
+import useSWR from "swr";
 import Dashboard from "../components/dashboard";
+import { fetcher } from "../utils/fetcher";
 
-const Admins = ({ admins }: { admins: WiiQare.Admin[] }) => {
+const Admins = () => {
+  const { data: admins, error } = useSWR<WiiQare.Admin[]>(
+    "/api/admins",
+    fetcher
+  );
+
+  if (error) return <p>Error getting list of admins.</p>;
+
+  if (!admins) return <p>Loading...</p>;
+
   return (
     <>
       <Head>
@@ -32,30 +42,6 @@ const Admins = ({ admins }: { admins: WiiQare.Admin[] }) => {
       </Dashboard>
     </>
   );
-};
-
-export const getServerSideProps = async () => {
-  const client = new MongoClient(process.env.MONGODB_URL || "");
-
-  try {
-    await client.connect();
-  } catch (error) {
-    console.log("Error connecting to MongoDB");
-    return { props: { admins: [] } };
-  }
-
-  const cursor = client.db("admins").collection<WiiQare.Admin>("web").find();
-
-  const projectCursor = cursor.project<WiiQare.Admin>({ _id: 0 });
-
-  try {
-    const admins = await projectCursor.toArray();
-    return { props: { admins: admins } };
-  } catch (error) {
-    console.log("Error converting to array");
-    return { props: { admins: [] } };
-  }
-  await client.close();
 };
 
 export default Admins;
