@@ -2,9 +2,8 @@ import React, { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   CashIcon,
-  ChatIcon,
+  CurrencyDollarIcon,
   MenuIcon,
-  ShoppingBagIcon,
   SwitchHorizontalIcon,
   UserGroupIcon,
   XIcon,
@@ -23,12 +22,18 @@ type Navigation = {
 const navigation: Navigation[] = [
   // { name: "Channels", href: "/channels", icon: CashIcon, current: false },
   {
-    name: "Deposits",
-    href: "/deposits",
-    icon: CashIcon,
+    name: "Customers",
+    href: "/customers",
+    icon: UserGroupIcon,
     current: false,
   },
   { name: "Wallets", href: "/wallets", icon: CashIcon, current: false },
+  {
+    name: "Deposits",
+    href: "/deposits",
+    icon: CurrencyDollarIcon,
+    current: false,
+  },
   {
     name: "Transfers",
     href: "/transfers",
@@ -44,12 +49,6 @@ const navigation: Navigation[] = [
   //   current: false,
   // },
   // { name: "Admins", href: "/admins", icon: UserGroupIcon, current: false },
-  {
-    name: "Customers",
-    href: "/customers",
-    icon: UserGroupIcon,
-    current: false,
-  },
 ];
 
 function classNames(...classes: string[]) {
