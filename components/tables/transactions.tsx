@@ -18,7 +18,7 @@ export default function TransactionTable({
                           scope="col"
                           className="px-3 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                         >
-                          Last updated
+                          Date
                         </th>
                         <th
                           scope="col"
@@ -39,7 +39,18 @@ export default function TransactionTable({
                       {transactions.map((transaction) => (
                         <tr key={transaction.hash}>
                           <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:pl-6">
-                            {new Date(transaction.lastUpdated).toLocaleString()}
+                            <div>
+                              Created:{" "}
+                              {new Date(
+                                transaction.dateCreated
+                              ).toLocaleString()}
+                            </div>
+                            <div>
+                              Updated:{" "}
+                              {new Date(
+                                transaction.lastUpdated
+                              ).toLocaleString()}
+                            </div>
                           </td>
                           <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900">
                             <div>

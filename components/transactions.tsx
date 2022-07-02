@@ -9,7 +9,7 @@ export default function Transactions({ expatId }: { expatId: string }) {
   const getTransactions = async () => {
     try {
       const response = await axios.get<WiiQare.Transaction[]>(
-        `/api/expats/${expatId}/transactions`
+        `/api/expats/${expatId}/deposits`
       );
       setTransactions(response.data);
     } catch (error) {

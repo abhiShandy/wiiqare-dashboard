@@ -13,7 +13,7 @@ export default function DepositTable({ data }: any) {
                         scope="col"
                         className="px-3 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                       >
-                        Last updated
+                        Date
                       </th>
                       <th
                         scope="col"
@@ -33,7 +33,12 @@ export default function DepositTable({ data }: any) {
                     {data.map((e: any) => (
                       <tr key={e.hash}>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:pl-6">
-                          {new Date(e.lastUpdated).toLocaleString()}
+                          <div>
+                            Created: {new Date(e.dateCreated).toLocaleString()}
+                          </div>
+                          <div>
+                            Updated: {new Date(e.lastUpdated).toLocaleString()}
+                          </div>
                         </td>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900">
                           <div>

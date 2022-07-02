@@ -15,7 +15,7 @@ export default function ChannelPayments() {
         <title>WiiQare | Deposits</title>
       </Head>
       <Dashboard title="Deposits">
-        {!data && <p>Loading ...</p>}
+        {!data && <p className="px-4 sm:px-6 md:px-8">Loading ...</p>}
         {data && <DepositTable data={data} />}
       </Dashboard>
     </>
