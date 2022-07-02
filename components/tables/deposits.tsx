@@ -1,4 +1,4 @@
-export default function ChannelPaymentTable({ data }: any) {
+export default function DepositTable({ data }: any) {
   return (
     <>
       <div className="px-4 sm:px-6 lg:px-8">

@@ -1,9 +1,9 @@
 import axios from "axios";
 import hawk from "hawk";
 import { NextApiHandler } from "next";
-import { credentials, MERCHANT_ID } from "./_common";
+import { credentials, MERCHANT_ID } from "../_common";
 
-const ChannelPayments: NextApiHandler = async (request, response) => {
+const Deposits: NextApiHandler = async (request, response) => {
   if (request.method === "GET") {
     try {
       const url = `https://api.sandbox.coindirect.com/api/v2/channel/payment?merchantId=${MERCHANT_ID}`;
@@ -24,4 +24,4 @@ const ChannelPayments: NextApiHandler = async (request, response) => {
   }
 };
 
-export default ChannelPayments;
+export default Deposits;

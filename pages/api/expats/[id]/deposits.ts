@@ -4,7 +4,7 @@ import { MongoClient } from "mongodb";
 import { NextApiHandler } from "next";
 import { credentials, MERCHANT_ID } from "../../_common";
 
-const Transactions: NextApiHandler = async (request, response) => {
+const Deposits: NextApiHandler = async (request, response) => {
   if (request.method === "GET") {
     const { id } = request.query;
 
@@ -64,7 +64,7 @@ const Transactions: NextApiHandler = async (request, response) => {
 
       // Transform the filtered channel payments to "Transaction" type
 
-      const transactions = filteredChannelPayments
+      const deposits = filteredChannelPayments
         .sort((a, b) => a.lastUpdated - b.lastUpdated)
         .filter((t) => t.paidAmount > 0)
         .map<WiiQare.Transaction>((fcp) => ({
@@ -79,17 +79,17 @@ const Transactions: NextApiHandler = async (request, response) => {
           balance: 0,
         }));
 
-      transactions.forEach((t, i) => {
+      deposits.forEach((t, i) => {
         if (i == 0) t.balance = t.displayAmount;
-        else t.balance = transactions[i - 1].balance + t.displayAmount;
+        else t.balance = deposits[i - 1].balance + t.displayAmount;
       });
 
       await client.close();
-      response.status(200).json(transactions);
+      response.status(200).json(deposits);
     } catch (error) {
       response.status(500).json({});
     }
   }
 };
 
-export default Transactions;
+export default Deposits;

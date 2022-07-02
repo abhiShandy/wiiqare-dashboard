@@ -23,8 +23,8 @@ type Navigation = {
 const navigation: Navigation[] = [
   // { name: "Channels", href: "/channels", icon: CashIcon, current: false },
   {
-    name: "Payments",
-    href: "/channel-payments",
+    name: "Deposits",
+    href: "/deposits",
     icon: CashIcon,
     current: false,
   },
