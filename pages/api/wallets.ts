@@ -1,5 +1,5 @@
 import { NextApiHandler } from "next";
-import { CreateWallet, ListWallets } from "./_common";
+import { CreateWallet, ListWallets } from "./_coindirect";
 
 const Wallets: NextApiHandler = async (request, response) => {
   if (request.method === "GET") {

@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 import { NextApiHandler } from "next";
-import { CreateChannel } from "../../_common";
+import { CreateChannel } from "../../_coindirect";
 
 const GetChannel: NextApiHandler = async (request, response) => {
   if (request.method !== "GET") response.status(300).json({});

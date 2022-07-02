@@ -1,5 +1,5 @@
 import { NextApiHandler } from "next";
-import { ListPayments } from "./_common";
+import { ListPayments } from "./_coindirect";
 
 const Payments: NextApiHandler = async (request, response) => {
   if (request.method === "GET") {

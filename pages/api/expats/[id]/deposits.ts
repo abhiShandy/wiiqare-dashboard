@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 import { NextApiHandler } from "next";
-import { ListChannelPayments } from "../../_common";
+import { ListChannelPayments } from "../../_coindirect";
 
 const Deposits: NextApiHandler = async (request, response) => {
   if (request.method === "GET") {

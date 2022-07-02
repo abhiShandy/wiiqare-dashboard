@@ -1,5 +1,5 @@
 import { NextApiHandler } from "next";
-import { ListQuotes } from "./_common";
+import { ListQuotes } from "./_coindirect";
 
 const Quotes: NextApiHandler = async (request, response) => {
   if (request.method === "GET") {

@@ -1,5 +1,5 @@
 import { NextApiHandler } from "next";
-import { CreateChannel, ListChannels } from "./_common";
+import { CreateChannel, ListChannels } from "./_coindirect";
 
 const Channels: NextApiHandler = async (request, response) => {
   if (request.method === "GET") {
