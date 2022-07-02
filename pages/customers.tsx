@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useState } from "react";
 import Dashboard from "../components/dashboard";
 import Modal from "../components/modal";
+import ExpatTable from "../components/tables/expats";
+import PatientTable from "../components/tables/patients";
 
 type Props = {
   expats: WiiQare.Expat[];
@@ -203,67 +205,17 @@ const Customers = ({ expats, patients }: Props) => {
         <title>WiiQare | Customers</title>
       </Head>
       <Dashboard title="Customers">
-        <div className="flex flex-row justify-between m-4">
-          <h2 className="text-xl font-bold">Expats</h2>
-          <CreateExpatModal />
-        </div>
-        <div className="border border-gray-200 rounded-md">
-          <table className="w-full">
-            <thead>
-              <tr className="text-left h-8">
-                <th className="pl-4">ID</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Name</th>
-                <th className="text-right pr-4">KYC</th>
-              </tr>
-            </thead>
-            <tbody>
-              {expats.map((expat) => (
-                <tr key={expat.id} className="hover:bg-gray-200 h-8 text-left">
-                  <td className="pl-4">
-                    <Link href={`/expats/${expat.id}`}>{expat.id}</Link>
-                  </td>
-                  <td>{expat.email}</td>
-                  <td>{expat.phone}</td>
-                  <td>{expat.name}</td>
-                  <td className="text-right pr-4">{expat.kyc}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="flex flex-row justify-between m-4">
-          <h2 className="text-xl font-bold">Patients</h2>
-          <CreatePatientModal />
-        </div>
-        <div className="border border-gray-200 rounded-md">
-          <table className="w-full">
-            <thead>
-              <tr className="text-left h-8">
-                <th className="pl-4">ID</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {patients.map((patient) => (
-                <tr
-                  key={patient.id}
-                  className="hover:bg-gray-200 h-8 text-left"
-                >
-                  <td className="pl-4">
-                    <Link href={`/patients/${patient.id}`}>{patient.id}</Link>
-                  </td>
-                  <td>{patient.email}</td>
-                  <td>{patient.phone}</td>
-                  <td>{patient.name}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-row justify-between my-4">
+            <h2 className="text-xl font-bold">Expats</h2>
+            <CreateExpatModal />
+          </div>
+          <ExpatTable expats={expats} />
+          <div className="flex flex-row justify-between my-4">
+            <h2 className="text-xl font-bold">Patients</h2>
+            <CreatePatientModal />
+          </div>
+          <PatientTable patients={patients} />
         </div>
       </Dashboard>
     </>
