@@ -24,7 +24,7 @@ export default function Transactions({ expatId }: { expatId: string }) {
   return (
     <>
       <div className="mt-8 px-4 sm:px-6 lg:px-8 py-2 text-xl flex justify-between">
-        <p>Transactions</p>
+        <p>Transactions (only deposits shown right now)</p>
         <button onClick={getTransactions}>
           <RefreshIcon className="h-6" />
         </button>
