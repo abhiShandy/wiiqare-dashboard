@@ -15,7 +15,13 @@ const Deposits: NextApiHandler = async (request, response) => {
           headers: { Authorization: header },
         })
       ).data;
-      response.status(200).json(channelPaymentsList);
+
+      channelPaymentsList.sort((a, b) => a.dateCreated - b.dateCreated);
+
+      const filteredChannelPayments = channelPaymentsList.filter(
+        (cp) => cp.paidAmount > 0
+      );
+      response.status(200).json(filteredChannelPayments);
     } catch (error) {
       console.log("Error getting channel payments");
       response.status(500).json({});
