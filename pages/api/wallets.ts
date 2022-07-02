@@ -1,36 +1,19 @@
-import axios from "axios";
-import hawk from "hawk";
 import { NextApiHandler } from "next";
-import { credentials } from "./_common";
+import { CreateWallet, ListWallets } from "./_common";
 
 const Wallets: NextApiHandler = async (request, response) => {
-  const url = "https://api.sandbox.coindirect.com/api/wallet";
   if (request.method === "GET") {
     try {
-      const { header } = hawk.client.header(url, "GET", {
-        credentials,
-      });
-      const coindirectResponse = await axios.get(url, {
-        headers: { Authorization: header },
-      });
-      response.status(200).json(coindirectResponse.data);
+      const wallets = await ListWallets();
+      response.status(200).json(wallets);
     } catch (error) {
       response.status(500).json({});
     }
   } else if (request.method === "POST") {
     const { currency, description } = request.body;
     try {
-      const { header } = hawk.client.header(url, "POST", {
-        credentials,
-      });
-      const coindirectResponse = await axios.post(
-        url,
-        { currency, description },
-        {
-          headers: { Authorization: header },
-        }
-      );
-      response.status(200).json(coindirectResponse.data);
+      const wallet = await CreateWallet(currency, description);
+      response.status(200).json(wallet);
     } catch (error) {
       response.status(500).json({});
     }

@@ -1,8 +1,6 @@
-import axios from "axios";
-import hawk from "hawk";
 import { MongoClient } from "mongodb";
 import { NextApiHandler } from "next";
-import { credentials, MERCHANT_ID } from "../../_common";
+import { ListChannelPayments } from "../../_common";
 
 const Deposits: NextApiHandler = async (request, response) => {
   if (request.method === "GET") {
@@ -10,19 +8,10 @@ const Deposits: NextApiHandler = async (request, response) => {
 
     try {
       // List all channel payments
-      let channelPaymentsList: any[];
-      try {
-        const url = `https://api.sandbox.coindirect.com/api/v2/channel/payment?merchantId=${MERCHANT_ID}`;
-        const { header } = hawk.client.header(url, "GET", {
-          credentials,
-        });
-        channelPaymentsList = (
-          await axios.get<any[]>(url, {
-            headers: { Authorization: header },
-          })
-        ).data;
-      } catch (error) {
-        console.log("Error getting channel payments");
+      let channelPayments: any[] | null;
+      channelPayments = await ListChannelPayments();
+
+      if (!channelPayments) {
         response.status(500).json({});
         return;
       }
@@ -58,7 +47,7 @@ const Deposits: NextApiHandler = async (request, response) => {
         return;
       }
 
-      const filteredChannelPayments = channelPaymentsList.filter((cp) =>
+      const filteredChannelPayments = channelPayments.filter((cp) =>
         channelRefs?.includes(cp.reference)
       );
 
