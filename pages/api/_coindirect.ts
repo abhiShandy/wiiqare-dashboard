@@ -81,7 +81,7 @@ export const ListChannels = async (): Promise<WiiQare.Channel[] | null> => {
 
 export const ListChannelPayments = async () => {
   try {
-    const url = `${COINDIRECT_API_URL}/v2/channel/payment?merchantId=${MERCHANT_ID}`;
+    const url = `${COINDIRECT_API_URL}/v2/channel/payment?merchantId=${MERCHANT_ID}&max=1000`;
     const { header } = hawk.client.header(url, "GET", {
       credentials,
     });
